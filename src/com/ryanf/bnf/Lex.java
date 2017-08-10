@@ -27,18 +27,23 @@ public class Lex {
 			|| ch == Lex.LeftBrace
 			|| ch == Lex.RightBrace
 			|| ch == Lex.Question
-			|| ch == Lex.HorBar
 			|| ch == Lex.VerBar
 			|| ch == Lex.LeftSquareBrace
 			|| ch == Lex.RightSquareBrace
 			|| ch == Lex.Hash
-			|| ch == Lex.Hat)
+			|| ch == Lex.Hat
+			|| ch == Lex.SemiColon
+			|| ch == Lex.Comma)
 			return true;
 		return false;
 	}
 	
 	public static boolean matchSeparator(char ch) {
-		return Character.isWhitespace(ch) || ch == Lex.Comma || ch == Lex.SemiColon;
+		return ch == Lex.Comma;
+	}
+	
+	public static boolean matchIgnore(char ch) {
+		return Character.isWhitespace(ch);
 	}
 	
 	public static TokenType getTokenType(String tokenName) {
@@ -66,6 +71,10 @@ public class Lex {
 			return TokenType.HASH;
 		else if (tokenName.equals("^"))
 			return TokenType.HAT;
+		else if (tokenName.equals(";"))
+			return TokenType.SEMICOLON;
+		else if (tokenName.equals(","))
+			return TokenType.COMMA;
 		else
 			return TokenType.IDENTIFIER;
 	}

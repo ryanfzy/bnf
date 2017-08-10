@@ -29,7 +29,7 @@ char = #x9
      | [#x20-#xD7FF]
      | [#xE000-#xFFFD]
      | [#x10000-#x10FFFF];
-s = (#x20 | #x9 | #xD | #xA)+;
+S = (#x20 | #x9 | #xD | #xA)+;
 name-start-char = ":"
                 | [A-Z]
                 | "_"

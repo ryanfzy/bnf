@@ -1,5 +1,7 @@
 package com.ryanf.bnf;
 
+import java.util.Vector;
+
 import com.ryanf.bnf.builders.TokenBuilder;
 import com.ryanf.bnf.interfaces.ISource;
 import com.ryanf.bnf.interfaces.IToken;
@@ -8,13 +10,29 @@ import com.ryanf.bnf.interfaces.ITokens;
 public class Tokens implements ITokens {
 	ISource source;
 	StringBuilder builder;
+	Vector<IToken> tokens;
+	int pos;
 	
 	public Tokens(ISource source) {
 		this.source = source;
 		init();
 	}
 	
-	public boolean hasNext() {
+	public void next() {
+		pos++;
+		if (pos > tokens.size() - 1)
+			tokens.add(getNext());
+	}
+	
+	public void previous() {
+		pos--;
+	}
+	
+	public IToken getToken() {
+		return tokens.elementAt(pos);
+	}
+	
+	public boolean hasMore() {
 		return source.hasMore();
 	}
 	
@@ -28,7 +46,7 @@ public class Tokens implements ITokens {
 				addToToken();
 				continue;
 			}
-			else if (!matchSeparator()) {
+			else if (!matchIgnore()) {
 				if (matchSpecial()) {
 					if (hasToken())
 						source.moveBackward();
@@ -43,11 +61,13 @@ public class Tokens implements ITokens {
 			if (hasToken())
 				break;
 		}
-		return TokenBuilder.createToken(getToken(), getTokenType());
+		return TokenBuilder.createToken(getTokenName(), getTokenType());
 	}
 	
 	private void init() {
 		builder = new StringBuilder();
+		tokens = new Vector<IToken>();
+		pos = -1;
 	}
 	
 	private void clearToken() {
@@ -62,7 +82,7 @@ public class Tokens implements ITokens {
 		return builder.toString().trim().length() >  0;
 	}
 	
-	private String getToken() {
+	private String getTokenName() {
 		return builder.toString();
 	}
 	
@@ -74,11 +94,11 @@ public class Tokens implements ITokens {
 		return Lex.matchQuote(source.getChar());
 	}
 	
-	private boolean matchSeparator() {
-		return Lex.matchSeparator(source.getChar());
+	private boolean matchIgnore() {
+		return Lex.matchIgnore(source.getChar());
 	}
 	
 	private TokenType getTokenType() {
-		return Lex.getTokenType(getToken());
+		return Lex.getTokenType(getTokenName());
 	}
 }
