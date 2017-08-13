@@ -5,4 +5,6 @@ public interface ITokens {
 	public void next();
 	public void previous();
 	public boolean hasMore();
+	public int getPos();
+	public void setPos(int pos);
 }

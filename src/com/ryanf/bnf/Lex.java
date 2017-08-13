@@ -16,6 +16,7 @@ public class Lex {
 	public static char DoubleQuote = '"';
 	public static char Comma = ',';
 	public static char SemiColon = ';';
+	public static char Plus = '+';
 	
 	public static boolean matchQuote(char ch) {
 		return ch == Lex.Quote || ch == Lex.DoubleQuote;
@@ -33,7 +34,8 @@ public class Lex {
 			|| ch == Lex.Hash
 			|| ch == Lex.Hat
 			|| ch == Lex.SemiColon
-			|| ch == Lex.Comma)
+			|| ch == Lex.Comma
+			|| ch == Lex.Plus)
 			return true;
 		return false;
 	}
@@ -53,6 +55,8 @@ public class Lex {
 			return TokenType.ASSIGN;
 		else if (tokenName.equals("*"))
 			return TokenType.STAR;
+		else if (tokenName.equals("+"))
+			return TokenType.PLUS;
 		else if (tokenName.equals("("))
 			return TokenType.LEFTBRACE;
 		else if (tokenName.equals(")"))

@@ -18,4 +18,5 @@ public enum TokenType {
 	HASH,
 	HAT,
 	STRING,
+	PLUS,
 }

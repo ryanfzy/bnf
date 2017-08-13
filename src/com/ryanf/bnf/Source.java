@@ -4,42 +4,71 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
+import com.ryanf.bnf.exceptions.OutOfCharException;
 import com.ryanf.bnf.interfaces.ISource;
 
 public class Source implements ISource {
 	Path filePath;
-	String fileSource;
-	int charPos;
+	List<String> fileLines;
+	int column;
+	int row;
 	
 	public Source(String fileName) {
 		filePath = Paths.get(fileName);
 	}
 
 	public char getChar() {
-		if (canReadFile())
-			return fileSource.charAt(charPos);
-		return Character.MIN_VALUE;
-		
+		return getChar(row, column);
 	}
 	
-	public void moveForward() {
-		charPos++;
+	public int getColumn() {
+		return column;
 	}
 	
-	public void moveBackward() {
-		charPos--;
+	public int getRow() {
+		return row;
+	}
+	
+	public void next() throws OutOfCharException {
+		if (hasMoreCol())
+			nextCol();
+		else if (hasMoreRow())
+			nextRow();
+		else
+			throw new OutOfCharException();
+	}
+	
+	public void previous() {
+		//charPos--;
+	}
+	
+	public char lookAhead(int pos) throws OutOfCharException {
+		int curCol = column + pos;
+		int curRow = row;
+		while (curCol < pos) {
+			if (curRow >= fileLines.size())
+				throw new OutOfCharException();
+			curCol = fileLines.get(curRow).length() - curCol;
+		}
+		return getChar(curRow, curCol);
 	}
 	
 	public boolean hasMore() {
 		if (canReadFile())
-			return (charPos + 1) < fileSource.length();
+			return hasMoreCol() || hasMoreRow();
 		return false;
 	}
 	
+	private  char getChar(int row, int column) {
+		return fileLines.get(row).charAt(column);
+	}
+	
 	private void readFile() throws IOException {
-		fileSource = new String(Files.readAllBytes(filePath));
-		charPos = -1;
+		fileLines = Files.readAllLines(filePath);
+		row = 0;
+		column = -1;
 	}
 	
 	private boolean tryReadFile() {
@@ -52,10 +81,29 @@ public class Source implements ISource {
 	}
 	
 	private boolean canReadFile() {
-		if (fileSource == null || fileSource.isEmpty()) {
+		if (fileLines == null || fileLines.isEmpty()) {
 			if (!tryReadFile())
 				return false;
 		}
 		return true;
+	}
+	
+	private boolean hasMoreCol() {
+		return column < fileLines.get(row).length() - 1;
+	}
+	
+	private boolean hasMoreRow() {
+		return row < fileLines.size() - 1;
+	}
+	
+	private void nextCol() {
+		column++;
+	}
+	
+	private void nextRow() {
+		row++;
+		column = 0;
+		while (!hasMoreCol())
+			nextRow();
 	}
 }

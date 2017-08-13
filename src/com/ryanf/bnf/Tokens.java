@@ -12,6 +12,8 @@ public class Tokens implements ITokens {
 	StringBuilder builder;
 	Vector<IToken> tokens;
 	int pos;
+	int tokenRow;
+	int tokenCol;
 	
 	public Tokens(ISource source) {
 		this.source = source;
@@ -32,36 +34,46 @@ public class Tokens implements ITokens {
 		return tokens.elementAt(pos);
 	}
 	
+	public int getPos() {
+		return pos;
+	}
+	
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	
 	public boolean hasMore() {
 		return source.hasMore();
 	}
 	
-	public IToken getNext() {
+	private IToken getNext() {
 		clearToken();
 		boolean foundQuote = false;
+		char quoteChar = ' ';
 		while (source.hasMore()) {
-			source.moveForward();
-			foundQuote ^= matchQuote();
+			try {
+				source.next();
+			} catch (Exception e) {
+				return null;
+			}
+			foundQuote ^= matchQuote(quoteChar);
 			if (foundQuote) {
 				addToToken();
 				continue;
 			}
 			else if (!matchIgnore()) {
-				if (matchSpecial()) {
-					if (hasToken())
-						source.moveBackward();
-					else
-						addToToken();
-				}
-				else {
+				if (!matchSpecial()) {
 					addToToken();
-					continue;
+					if (!matchSpecialOneAhead())
+						continue;
 				}
+				else
+					addToToken();
 			}
 			if (hasToken())
 				break;
 		}
-		return TokenBuilder.createToken(getTokenName(), getTokenType());
+		return TokenBuilder.createToken(getTokenName(), getTokenType(), tokenRow, tokenCol);
 	}
 	
 	private void init() {
@@ -72,10 +84,16 @@ public class Tokens implements ITokens {
 	
 	private void clearToken() {
 		builder = new StringBuilder();
+		tokenRow = -1;
+		tokenCol = -1;
 	}
 	
 	private void addToToken() {
 		builder.append(source.getChar());
+		if (tokenRow == -1 && tokenCol == -1) {
+			tokenRow = source.getRow();
+			tokenCol = source.getColumn();
+		}
 	}
 	
 	private boolean hasToken() {
@@ -90,8 +108,16 @@ public class Tokens implements ITokens {
 		return Lex.matchSpecial(source.getChar());
 	}
 	
-	private boolean matchQuote() {
-		return Lex.matchQuote(source.getChar());
+	private boolean matchSpecialOneAhead() {
+		try {
+			return Lex.matchSpecial(source.lookAhead(1));
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	private boolean matchQuote(char quoteChar) {
+		return Lex.matchQuote(source.getChar()) && source.getChar() == quoteChar;
 	}
 	
 	private boolean matchIgnore() {
