@@ -7,4 +7,5 @@ public interface ITokens {
 	public boolean hasMore();
 	public int getPos();
 	public void setPos(int pos);
+	public IToken lookAhead(int pos);
 }

@@ -3,17 +3,17 @@ package com.ryanf.bnf;
 import java.util.Vector;
 
 import com.ryanf.bnf.builders.TokenBuilder;
+import com.ryanf.bnf.exceptions.OutOfCharException;
 import com.ryanf.bnf.interfaces.ISource;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
+import com.ryanf.bnf.types.TokenContext;
 
 public class Tokens implements ITokens {
 	ISource source;
-	StringBuilder builder;
 	Vector<IToken> tokens;
 	int pos;
-	int tokenRow;
-	int tokenCol;
+	TokenBuilder tokenBuilder;
 	
 	public Tokens(ISource source) {
 		this.source = source;
@@ -46,85 +46,38 @@ public class Tokens implements ITokens {
 		return source.hasMore();
 	}
 	
+	public IToken lookAhead(int pos) {
+		int originalPos = getPos();
+		while (pos > 0) {
+			pos--;
+			next();
+		}
+		IToken token = getToken();
+		setPos(originalPos);
+		return token;
+	}
+	
 	private IToken getNext() {
-		clearToken();
-		boolean foundQuote = false;
-		char quoteChar = ' ';
+		int tokenCol = -1;
+		int tokenRow = -1;;
 		while (source.hasMore()) {
 			try {
 				source.next();
-			} catch (Exception e) {
-				return null;
-			}
-			foundQuote ^= matchQuote(quoteChar);
-			if (foundQuote) {
-				addToToken();
-				continue;
-			}
-			else if (!matchIgnore()) {
-				if (!matchSpecial()) {
-					addToToken();
-					if (!matchSpecialOneAhead())
-						continue;
+				if (tokenCol == -1 && tokenRow == -1) {
+					tokenCol = source.getColumn() + 1;
+					tokenRow = source.getRow() + 1;
 				}
-				else
-					addToToken();
+				if (tokenBuilder.feed(source.getChar(), source.lookAhead(1)))
+					break;
+			} catch (Exception e) {
 			}
-			if (hasToken())
-				break;
 		}
-		return TokenBuilder.createToken(getTokenName(), getTokenType(), tokenRow, tokenCol);
+		return tokenBuilder.createToken(tokenCol, tokenRow);
 	}
 	
 	private void init() {
-		builder = new StringBuilder();
+		tokenBuilder = new TokenBuilder();
 		tokens = new Vector<IToken>();
 		pos = -1;
-	}
-	
-	private void clearToken() {
-		builder = new StringBuilder();
-		tokenRow = -1;
-		tokenCol = -1;
-	}
-	
-	private void addToToken() {
-		builder.append(source.getChar());
-		if (tokenRow == -1 && tokenCol == -1) {
-			tokenRow = source.getRow();
-			tokenCol = source.getColumn();
-		}
-	}
-	
-	private boolean hasToken() {
-		return builder.toString().trim().length() >  0;
-	}
-	
-	private String getTokenName() {
-		return builder.toString();
-	}
-	
-	private boolean matchSpecial() {
-		return Lex.matchSpecial(source.getChar());
-	}
-	
-	private boolean matchSpecialOneAhead() {
-		try {
-			return Lex.matchSpecial(source.lookAhead(1));
-		} catch (Exception e) {
-			return false;
-		}
-	}
-	
-	private boolean matchQuote(char quoteChar) {
-		return Lex.matchQuote(source.getChar()) && source.getChar() == quoteChar;
-	}
-	
-	private boolean matchIgnore() {
-		return Lex.matchIgnore(source.getChar());
-	}
-	
-	private TokenType getTokenType() {
-		return Lex.getTokenType(getTokenName());
 	}
 }

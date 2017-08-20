@@ -41,16 +41,17 @@ public class Source implements ISource {
 	}
 	
 	public void previous() {
-		//charPos--;
+		throw new UnsupportedOperationException();
 	}
 	
 	public char lookAhead(int pos) throws OutOfCharException {
 		int curCol = column + pos;
 		int curRow = row;
-		while (curCol < pos) {
+		while (curCol > fileLines.get(curRow).length() - 1) {
 			if (curRow >= fileLines.size())
 				throw new OutOfCharException();
 			curCol = fileLines.get(curRow).length() - curCol;
+			curRow++;
 		}
 		return getChar(curRow, curCol);
 	}
@@ -61,14 +62,18 @@ public class Source implements ISource {
 		return false;
 	}
 	
+	private void init() {
+		row = 0;
+		column = -1;
+	}
+	
 	private  char getChar(int row, int column) {
 		return fileLines.get(row).charAt(column);
 	}
 	
 	private void readFile() throws IOException {
 		fileLines = Files.readAllLines(filePath);
-		row = 0;
-		column = -1;
+		init();
 	}
 	
 	private boolean tryReadFile() {

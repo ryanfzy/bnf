@@ -25,4 +25,9 @@ public class Token implements IToken {
 	public TokenPos getPos() {
 		return pos;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s[%s](%d,%d)", name, type.toString(), pos.getRow(), pos.getColumn());
+	}
 }
