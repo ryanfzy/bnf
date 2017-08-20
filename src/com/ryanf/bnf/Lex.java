@@ -33,7 +33,6 @@ public class Lex {
 			|| ch == Lex.RightBrace
 			|| ch == Lex.Question
 			|| ch == Lex.VerBar
-			|| ch == Lex.HorBar
 			|| ch == Lex.LeftSquareBrace
 			|| ch == Lex.RightSquareBrace
 			|| ch == Lex.Hash
@@ -43,6 +42,10 @@ public class Lex {
 			|| ch == Lex.Plus)
 			return true;
 		return false;
+	}
+	
+	public static boolean matchSpecialInNumberContext(char ch) {
+		return matchSpecial(ch) || ch == Lex.HorBar;
 	}
 	
 	public static boolean matchSeparator(char ch) {
@@ -62,7 +65,7 @@ public class Lex {
 	}
 	
 	public static TokenType getTokenType(String tokenName) {
-		if (tokenName.startsWith("'") || tokenName.startsWith("\""))
+		if (tokenName.length() > 1 && (tokenName.startsWith("'") || tokenName.startsWith("\"")))
 			return TokenType.STRING;
 		else if (tokenName.startsWith("#") && tokenName.length() > 1)
 			return TokenType.NUMBER;

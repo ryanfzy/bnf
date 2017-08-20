@@ -31,7 +31,7 @@ public class TokenBuilder {
 		}
 		else if (isInCharacterSetContext()) {
 			addToToken(curChar);
-			if (matchNumberStartChar(curChar))
+			if (Lex.matchNumberStartChar(curChar))
 				pushNumberContext();
 			else {
 				foundToken = true;
@@ -41,7 +41,7 @@ public class TokenBuilder {
 		}
 		else if (isInNumberContext()) {
 			addToToken(curChar);
-			if (matchSpecial(nextChar) || matchIgnore(nextChar)) {
+			if (Lex.matchSpecialInNumberContext(nextChar) || Lex.matchIgnore(nextChar)) {
 				foundToken = true;
 				popTokenContext();
 			}
@@ -51,21 +51,21 @@ public class TokenBuilder {
 			addToToken(curChar);
 			foundToken = true;
 		}
-		else if (matchNumberStartChar(curChar)) {
+		else if (Lex.matchNumberStartChar(curChar)) {
 			addToToken(curChar);
 			pushNumberContext();
 		}
-		else if (matchSpecial(curChar)) {
+		else if (Lex.matchSpecial(curChar)) {
 			addToToken(curChar);
 			foundToken = true;
 		}
-		else if (matchQuote(curChar)) {
+		else if (Lex.matchQuote(curChar)) {
 			pushStringContext(curChar);
 			addToToken(curChar);
 		}
-		else if (!matchIgnore(curChar)) {
+		else if (!Lex.matchIgnore(curChar)) {
 			addToToken(curChar);
-			if (matchSpecial(nextChar) || matchIgnore(nextChar))
+			if (Lex.matchSpecial(nextChar) || Lex.matchIgnore(nextChar))
 				foundToken = true;
 		}
 		
@@ -145,6 +145,7 @@ public class TokenBuilder {
 		return Lex.getTokenType(getTokenName());
 	}
 	
+	/*
 	private boolean matchSpecial(char feedChar) {
 		return Lex.matchSpecial(feedChar);
 	}
@@ -159,5 +160,5 @@ public class TokenBuilder {
 	
 	private boolean matchNumberStartChar(char ch) {
 		return Lex.matchNumberStartChar(ch);
-	}
+	}*/
 }

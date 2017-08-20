@@ -20,7 +20,7 @@ markup-decl = element-decl
             | pi
             | comment;
 
-ext-subset = text-decl? ext-subset-decl
+ext-subset = text-decl?, ext-subset-decl;
 ext-subset-decl = (markup-decl | conditional-sect | decl-sep)*;
 
 char = #x9
@@ -53,15 +53,15 @@ name-char = name-start-char
           | #xB7
           | [#x0300-#x036F]
           | [#x203F-#x2040];
-name = name-start-char (name-char)*;
-names = name (#x20 name)*;
+name = name-start-char, (name-char)*;
+names = name, (#x20, name)*;
 nmtoken = (name-char)+;
-nmtokens = nmtoken (#x20 nmtoken)*;
+nmtokens = nmtoken, (#x20, nmtoken)*;
 
 entity-value = '"', ([^%&"] | pe-reference | reference)*, '"'
              | "'", ([^%&'] | pe-reference | reference)*, "'";
-att-value = '"', ([^<&"] | reference)* '"'
-          | "'", ([^<&'] | reference)* "'";
+att-value = '"', ([^<&"] | reference)*, '"'
+          | "'", ([^<&'] | reference)*, "'";
 system-literal = ('"', [^"]*, '"')
                | ("'", [^']*, "'");
 pubid-literal = '"', pubid-char, '"'
@@ -75,7 +75,7 @@ char-data = [^<&]* - ([^<&]*, ']]>', [^<&]*);
 
 comment = '<!--', ((char - '-') |('-', (char - '-')))*, '-->';
 
-pi = '<?' pi-target, (S, (char* - (char*, '?>', char*)))?, '?>';
+pi = '<?', pi-target, (S, (char* - (char*, '?>', char*)))?, '?>';
 pi-target = name - (('X' | 'x'), ('M' | 'm'), ('L' | 'l'));
 
 cdsect = cdstart, cdata, cdend;
@@ -120,7 +120,7 @@ tokenized-type = 'ID'
                | 'NMTOKENS';
 enumerated-type = notation-type
                 | enumeration;
-notation-type = 'NOTATION', S, '(', S? name (S?, '|', S?, name)*, S?, ')';
+notation-type = 'NOTATION', S, '(', S?, name, (S?, '|', S?, name)*, S?, ')';
 enumeration = '(', S?, nmtoken, (S?, '|', S?, nmtoken)*, S?, ')';
 
 default-decl = '#REQUIRED'

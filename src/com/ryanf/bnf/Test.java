@@ -13,19 +13,19 @@ public class Test {
 	public static void main(String[] args) {
 		String filePath = "D:\\eclipse-workspace\\bnf\\xml.txt";
 	
+		/*
 		ITokens tokens = TokensBuilder.createTokens(SourceBuilder.createSource(filePath));
 		while (tokens.hasMore()) {
 			tokens.next();
 			IToken token = tokens.getToken();
 			System.out.println(token.toString());
-		}
+		}*/
 		
-		/*
 		Parser parser = ParserBuilder.createParser(filePath);
 		try {
 			parser.parse();
 		} catch (ParserException e) {
 			System.out.println(e.toString());
-		}*/
+		}
 	}
 }

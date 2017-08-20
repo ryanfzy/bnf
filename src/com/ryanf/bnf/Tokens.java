@@ -67,7 +67,12 @@ public class Tokens implements ITokens {
 					tokenCol = source.getColumn() + 1;
 					tokenRow = source.getRow() + 1;
 				}
-				if (tokenBuilder.feed(source.getChar(), source.lookAhead(1)))
+				char nextChar = ' ';
+				try {
+					nextChar = source.lookAhead(1);
+				}
+				catch (Exception e) {}
+				if (tokenBuilder.feed(source.getChar(), nextChar))
 					break;
 			} catch (Exception e) {
 			}

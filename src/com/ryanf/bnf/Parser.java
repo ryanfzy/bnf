@@ -1,7 +1,5 @@
 package com.ryanf.bnf;
 
-import java.util.Stack;
-
 import com.ryanf.bnf.exceptions.IdentifierNotMatchException;
 import com.ryanf.bnf.exceptions.MultifierNotMatchException;
 import com.ryanf.bnf.exceptions.ParserException;
@@ -13,11 +11,9 @@ import com.ryanf.bnf.types.TokenType;
 
 public class Parser {
 	ITokens tokens;
-	//Stack<Integer> tpStack;
 	
 	public Parser(ITokens tokens) {
 		this.tokens = tokens;
-		//init();
 	}
 	
 	public void parse() throws ParserException {
@@ -36,21 +32,30 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		matchIdentifier();
+		match(TokenType.IDENTIFIER);
 	}
 	
 	private void matchRhs() throws ParserException {
 		matchRhsElem();
-		if (getTokenType() == TokenType.COMMA)
-		{
+		if (getTokenType() == TokenType.COMMA) {
 			match(TokenType.COMMA);
+			matchRhs();
+		}
+		else if (getTokenType() == TokenType.VBAR) {
+			match(TokenType.VBAR);
+			matchRhs();
+		}
+		else if (getTokenType() == TokenType.HBAR) {  // match "-", which is minus in this case
+			match(TokenType.HBAR);
 			matchRhs();
 		}
 	}
 	
 	private void matchRhsElem() throws ParserException {
-		if (getTokenType() == TokenType.STRING)
-			matchTerminal();
+		if (getTokenType() == TokenType.NUMBER)
+			match(TokenType.NUMBER);
+		else if (getTokenType() == TokenType.STRING)
+			match(TokenType.STRING);
 		else if (getTokenType() == TokenType.LEFTBRACE || getTokenType() == TokenType.LEFTSQUAREBRACE)
 			matchRegex();
 		else
@@ -83,32 +88,21 @@ public class Parser {
 		else if (getTokenType() == TokenType.LEFTBRACE) {
 			match(TokenType.LEFTBRACE);
 			matchRhs();
-			if (getTokenType() == TokenType.VBAR) {
-				match(TokenType.VBAR);
-				matchRhs();
-			}
 			match(TokenType.RIGHTBRACE);
 		}
 	}
 	
 	private void matchCharList() throws ParserException {
-		match(TokenType.IDENTIFIER);
-		if (tokens.lookAhead(1).getType() != TokenType.RIGHTSQUAREBRACE)
+		if (getTokenType() != TokenType.RIGHTSQUAREBRACE)
+			match(getTokenType());
+		if (getTokenType() != TokenType.RIGHTSQUAREBRACE)
 			matchCharList();
 	}
 	
-	private void matchIdentifier() throws ParserException {
-		match(TokenType.IDENTIFIER);
-	}
-	
 	private void matchIdentifierWithMultifier() throws ParserException {
-		matchIdentifier();
+		match(TokenType.IDENTIFIER);
 		if (isQuantifier())
 			matchQuantifier();
-	}
-	
-	private void matchTerminal() throws ParserException {
-		match(TokenType.STRING);
 	}
 	
 	private void match(TokenType type) throws ParserException {
@@ -129,21 +123,4 @@ public class Parser {
 	private boolean isQuantifier() {
 		return getTokenType() == TokenType.QUESTION || getTokenType() == TokenType.PLUS || getTokenType() == TokenType.STAR;
 	}
-	
-	/*
-	private boolean follow(TokenType type) {
-		return tokens.lookAhead(1).getType() == type;
-	}
-	
-	private void pushState() {
-		tpStack.push(tokens.getPos());
-	}
-	
-	private void popState() {
-		tokens.setPos(tpStack.pop());
-	}
-	
-	private void init() {
-		tpStack = new Stack<Integer>();
-	}*/
 }
