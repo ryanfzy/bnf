@@ -1,14 +1,16 @@
 package com.ryanf.bnf.builders;
 
+import java.util.Stack;
+
 import com.ryanf.bnf.Lex;
 import com.ryanf.bnf.Token;
-import com.ryanf.bnf.TokenType;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.TokenContext;
+import com.ryanf.bnf.types.TokenType;
 
 public class TokenBuilder {
 	StringBuilder strBuilder;
-	TokenContext context;
+	Stack<TokenContext> contexts;
 	char quote;
 	boolean foundToken;
 	
@@ -23,27 +25,42 @@ public class TokenBuilder {
 		if (isInStringContext()) {
 			addToToken(curChar);
 			if (curChar == quote) {
-				resetTokenContext();
+				popTokenContext();
 				foundToken = true;
 			}
-		} 
+		}
 		else if (isInCharacterSetContext()) {
 			addToToken(curChar);
-			foundToken = true;
-			if (matchCloseCharacterSet(curChar))
-				resetTokenContext();
+			if (matchNumberStartChar(curChar))
+				pushNumberContext();
+			else {
+				foundToken = true;
+				if (matchCloseCharacterSet(curChar))
+					popTokenContext();
+			}
+		}
+		else if (isInNumberContext()) {
+			addToToken(curChar);
+			if (matchSpecial(nextChar) || matchIgnore(nextChar)) {
+				foundToken = true;
+				popTokenContext();
+			}
 		}
 		else if (matchOpenCharacterSet(curChar)) {
-			setInCharacterSetContext();
+			pushCharacterSetContext();
 			addToToken(curChar);
 			foundToken = true;
+		}
+		else if (matchNumberStartChar(curChar)) {
+			addToToken(curChar);
+			pushNumberContext();
 		}
 		else if (matchSpecial(curChar)) {
 			addToToken(curChar);
 			foundToken = true;
 		}
 		else if (matchQuote(curChar)) {
-			setInStringContext(curChar);
+			pushStringContext(curChar);
 			addToToken(curChar);
 		}
 		else if (!matchIgnore(curChar)) {
@@ -64,14 +81,21 @@ public class TokenBuilder {
 	private void init() {
 		strBuilder = new StringBuilder();
 		foundToken = false;
+		contexts = new Stack<TokenContext>();
+		contexts.push(TokenContext.NOCONTEXT);
+		
 	}
 	
 	private boolean isInStringContext() {
-		return context == TokenContext.STRING;
+		return contexts.peek() == TokenContext.STRING;
 	}
 	
 	private boolean isInCharacterSetContext() {
-		return context == TokenContext.CHARACTERSET;
+		return contexts.peek() == TokenContext.CHARACTERSET;
+	}
+	
+	private boolean isInNumberContext() {
+		return contexts.peek() == TokenContext.NUMBER;
 	}
 	
 	private boolean matchCloseCharacterSet(char feedChar) {
@@ -82,49 +106,23 @@ public class TokenBuilder {
 		return feedChar == Lex.LeftSquareBrace;
 	}
 	
-	private void resetTokenContext() {
-		context = TokenContext.NOCONTEXT;
+	private void popTokenContext() {
+		contexts.pop();
 		quote = Character.MIN_VALUE;
 	}
 	
-	private void setInStringContext(char quoteChar) {
-		context = TokenContext.STRING;
+	private void pushStringContext(char quoteChar) {
+		contexts.add(TokenContext.STRING);
 		quote = quoteChar;
 	}
 	
-	private void setInCharacterSetContext() {
-		context = TokenContext.CHARACTERSET;
+	private void pushCharacterSetContext() {
+		contexts.add(TokenContext.CHARACTERSET);
 	}
 	
-	/*
-	private IToken getNext() {
-		clearToken();
-		while (source.hasMore()) {
-			try {
-				source.next();
-			} catch (Exception e) {
-				return null;
-			}
-			if (matchQuote()) {
-				getString();
-				break;
-			}
-			else if (!matchIgnore()) {
-				if (!matchSpecial()) {
-					addToToken();
-					if (!matchSpecialOneAhead())
-						continue;
-				}
-				else {
-					addToToken();
-					
-				}
-			}
-			if (hasToken())
-				break;
-		}
-		return TokenBuilder.createToken(getTokenName(), getTokenType(), tokenCol+1, tokenRow+1);
-	}*/
+	private void pushNumberContext() {
+		contexts.add(TokenContext.NUMBER);
+	}
 	
 	private void resetToken() {
 		strBuilder = new StringBuilder();
@@ -157,5 +155,9 @@ public class TokenBuilder {
 	
 	private boolean matchIgnore(char feedChar) {
 		return Lex.matchIgnore(feedChar);
+	}
+	
+	private boolean matchNumberStartChar(char ch) {
+		return Lex.matchNumberStartChar(ch);
 	}
 }

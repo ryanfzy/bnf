@@ -4,4 +4,5 @@ public enum TokenContext {
 	NOCONTEXT,
 	CHARACTERSET,
 	STRING,
+	NUMBER,
 }

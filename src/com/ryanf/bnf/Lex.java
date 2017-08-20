@@ -1,5 +1,9 @@
 package com.ryanf.bnf;
 
+import javax.xml.stream.events.Characters;
+
+import com.ryanf.bnf.types.TokenType;
+
 public class Lex {
 	public static char Assign = '=';
 	public static char Star = '*';
@@ -29,6 +33,7 @@ public class Lex {
 			|| ch == Lex.RightBrace
 			|| ch == Lex.Question
 			|| ch == Lex.VerBar
+			|| ch == Lex.HorBar
 			|| ch == Lex.LeftSquareBrace
 			|| ch == Lex.RightSquareBrace
 			|| ch == Lex.Hash
@@ -48,9 +53,19 @@ public class Lex {
 		return Character.isWhitespace(ch);
 	}
 	
+	public static boolean matchDigit(char ch) {
+		return Character.isDigit(ch);
+	}
+	
+	public static boolean matchNumberStartChar(char ch) {
+		return ch == Lex.Hash;
+	}
+	
 	public static TokenType getTokenType(String tokenName) {
 		if (tokenName.startsWith("'") || tokenName.startsWith("\""))
 			return TokenType.STRING;
+		else if (tokenName.startsWith("#") && tokenName.length() > 1)
+			return TokenType.NUMBER;
 		else if (tokenName.equals("="))
 			return TokenType.ASSIGN;
 		else if (tokenName.equals("*"))

@@ -1,4 +1,4 @@
-package com.ryanf.bnf;
+package com.ryanf.bnf.types;
 
 public enum TokenType {
 	IDENTIFIER,
@@ -19,4 +19,5 @@ public enum TokenType {
 	HAT,
 	STRING,
 	PLUS,
+	NUMBER,
 }

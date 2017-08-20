@@ -9,6 +9,7 @@ import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.RhsNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.ITokens;
+import com.ryanf.bnf.types.TokenType;
 
 public class Parser {
 	ITokens tokens;

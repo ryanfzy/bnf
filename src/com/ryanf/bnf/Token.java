@@ -2,6 +2,7 @@ package com.ryanf.bnf;
 
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.TokenPos;
+import com.ryanf.bnf.types.TokenType;
 
 public class Token implements IToken {
 	String name;

@@ -1,7 +1,7 @@
 package com.ryanf.bnf.exceptions;
 
-import com.ryanf.bnf.TokenType;
 import com.ryanf.bnf.interfaces.IToken;
+import com.ryanf.bnf.types.TokenType;
 
 public class TokenTypeNotMatchException extends ParserException {
 	private static final long serialVersionUID = 1135090799239775994L;
