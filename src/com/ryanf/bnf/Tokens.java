@@ -48,10 +48,8 @@ public class Tokens implements ITokens {
 	
 	public IToken lookAhead(int pos) {
 		int originalPos = getPos();
-		while (pos > 0) {
-			pos--;
+		for (int i = pos; i > 0; i--)
 			next();
-		}
 		IToken token = getToken();
 		setPos(originalPos);
 		return token;
@@ -67,11 +65,12 @@ public class Tokens implements ITokens {
 					tokenCol = source.getColumn() + 1;
 					tokenRow = source.getRow() + 1;
 				}
-				char nextChar = ' ';
+				char nextChar = Character.MIN_VALUE;
 				try {
 					nextChar = source.lookAhead(1);
 				}
-				catch (Exception e) {}
+				catch (Exception e) {
+				}
 				if (tokenBuilder.feed(source.getChar(), nextChar))
 					break;
 			} catch (Exception e) {

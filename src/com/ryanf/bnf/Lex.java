@@ -1,7 +1,5 @@
 package com.ryanf.bnf;
 
-import javax.xml.stream.events.Characters;
-
 import com.ryanf.bnf.types.TokenType;
 
 public class Lex {
@@ -67,7 +65,7 @@ public class Lex {
 	public static TokenType getTokenType(String tokenName) {
 		if (tokenName.length() > 1 && (tokenName.startsWith("'") || tokenName.startsWith("\"")))
 			return TokenType.STRING;
-		else if (tokenName.startsWith("#") && tokenName.length() > 1)
+		else if (tokenName.length() > 1 && tokenName.startsWith("#"))
 			return TokenType.NUMBER;
 		else if (tokenName.equals("="))
 			return TokenType.ASSIGN;

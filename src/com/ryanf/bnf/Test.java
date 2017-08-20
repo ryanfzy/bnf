@@ -20,12 +20,13 @@ public class Test {
 			IToken token = tokens.getToken();
 			System.out.println(token.toString());
 		}*/
-		
+		System.out.println("Start");
 		Parser parser = ParserBuilder.createParser(filePath);
 		try {
 			parser.parse();
 		} catch (ParserException e) {
 			System.out.println(e.toString());
 		}
+		System.out.println("End");
 	}
 }

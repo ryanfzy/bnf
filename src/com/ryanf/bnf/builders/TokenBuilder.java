@@ -69,9 +69,7 @@ public class TokenBuilder {
 				foundToken = true;
 		}
 		
-		if (foundToken && hasToken())
-			return true;
-		return false;
+		return foundToken && hasToken();
 	}
 	
 	public IToken createToken(int col, int row) {
@@ -98,12 +96,12 @@ public class TokenBuilder {
 		return contexts.peek() == TokenContext.NUMBER;
 	}
 	
-	private boolean matchCloseCharacterSet(char feedChar) {
-		return feedChar == Lex.RightSquareBrace;
+	private boolean matchCloseCharacterSet(char ch) {
+		return ch == Lex.RightSquareBrace;
 	}
 	
-	private boolean matchOpenCharacterSet(char feedChar) {
-		return feedChar == Lex.LeftSquareBrace;
+	private boolean matchOpenCharacterSet(char ch) {
+		return ch == Lex.LeftSquareBrace;
 	}
 	
 	private void popTokenContext() {
@@ -127,10 +125,11 @@ public class TokenBuilder {
 	private void resetToken() {
 		strBuilder = new StringBuilder();
 		foundToken = false;
+		quote = Character.MIN_VALUE;
 	}
 	
-	private void addToToken(char feedChar) {
-		strBuilder.append(feedChar);
+	private void addToToken(char ch) {
+		strBuilder.append(ch);
 	}
 	
 	private boolean hasToken() {
@@ -144,21 +143,4 @@ public class TokenBuilder {
 	private TokenType getTokenType() {
 		return Lex.getTokenType(getTokenName());
 	}
-	
-	/*
-	private boolean matchSpecial(char feedChar) {
-		return Lex.matchSpecial(feedChar);
-	}
-	
-	private boolean matchQuote(char feedChar) {
-		return Lex.matchQuote(feedChar);
-	}
-	
-	private boolean matchIgnore(char feedChar) {
-		return Lex.matchIgnore(feedChar);
-	}
-	
-	private boolean matchNumberStartChar(char ch) {
-		return Lex.matchNumberStartChar(ch);
-	}*/
 }
