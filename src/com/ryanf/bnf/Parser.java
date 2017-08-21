@@ -1,10 +1,7 @@
 package com.ryanf.bnf;
 
-import com.ryanf.bnf.exceptions.IdentifierNotMatchException;
-import com.ryanf.bnf.exceptions.MultifierNotMatchException;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
-import com.ryanf.bnf.exceptions.RhsNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.ITokens;
 import com.ryanf.bnf.types.TokenType;
@@ -24,7 +21,6 @@ public class Parser {
 	}
 	
 	private void parseRule() throws ParserException {
-		
 		matchLhs();
 		match(TokenType.ASSIGN);
 		matchRhs();
