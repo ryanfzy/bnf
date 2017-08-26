@@ -22,6 +22,10 @@ public class ParseTreeBuilder {
 		return new AsignStatNode();
 	}
 	
+	public static IAstNode createAsignStatNode(IAstNode lhs, IAstNode rhs) {
+		return new AsignStatNode(lhs, rhs);
+	}
+	
 	public static IAstNode createIdentNode(IToken token) {
 		return new IdentNode(token);
 	}
@@ -52,5 +56,9 @@ public class ParseTreeBuilder {
 
 	public static IAstNode createSubStatNode() {
 		return new SubStatNode();
+	}
+	
+	public static IAstNode createSubStatNode(IAstNode left, IAstNode right) {
+		return new SubStatNode(left, right);
 	}
 }

@@ -24,6 +24,10 @@ public abstract class AstNode implements IAstNode {
 		children.add(node);
 	}
 	
+	public int getChildrenCount() {
+		return children.size();
+	}
+	
 	public IAstNode getChild(int index) {
 		if (index > -1 && index < children.size())
 			return children.get(index);

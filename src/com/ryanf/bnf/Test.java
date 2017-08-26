@@ -4,6 +4,7 @@ import com.ryanf.bnf.builders.ParserBuilder;
 import com.ryanf.bnf.builders.SourceBuilder;
 import com.ryanf.bnf.builders.TokensBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
+import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.ISource;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
@@ -23,7 +24,8 @@ public class Test {
 		System.out.println("Start");
 		Parser parser = ParserBuilder.createParser(filePath);
 		try {
-			parser.parse();
+			IAstNode parseTree = parser.parse();
+			System.out.println(parseTree.toString());
 		} catch (ParserException e) {
 			System.out.println(e.toString());
 		}

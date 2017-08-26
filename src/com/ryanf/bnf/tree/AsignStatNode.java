@@ -8,6 +8,12 @@ public class AsignStatNode extends AstNode {
 		super();
 	}
 	
+	public AsignStatNode(IAstNode lhs, IAstNode rhs) {
+		super();
+		addChild(lhs);
+		addChild(rhs);
+	}
+	
 	public IAstNode getLhs() {
 		return getChild(0);
 	}
@@ -19,5 +25,10 @@ public class AsignStatNode extends AstNode {
 	@Override
 	public AstNodeType getType() {
 		return AstNodeType.ASIGN_STAT;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s = %s", getLhs().toString(), getRhs().toString());
 	}
 }

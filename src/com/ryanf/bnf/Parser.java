@@ -20,28 +20,30 @@ public class Parser {
 	
 	public Parser(ITokens tokens) {
 		this.tokens = tokens;
-		init();
 	}
 	
 	private void init() {
 		astNodes = new Stack<IAstNode>();
+		statListNode = ParseTreeBuilder.createStatListNode();
 	}
 	
-	public void parse() throws ParserException {
-		//addStatListNode();
+	public IAstNode parse() throws ParserException {
+		init();
 		tokens.next();
 		while (tokens.hasMore()) {
 			parseRule();
-			//addAstNode(popAstNode());
+			statListNode.addChild(popAstNode());
 		}
+		return statListNode;
 	}
 	
 	private void parseRule() throws ParserException {
 		if (lookAheadType(1) == TokenType.ASSIGN) {
-			//pushAstNode(ParseTreeBuilder.createAsignStatNode());
+			pushAstNode(ParseTreeBuilder.createAsignStatNode());
 			matchLhs();
 			match(TokenType.ASSIGN);
 			matchRhs();
+			addAstNode(popAstNode());
 			match(TokenType.SEMICOLON);
 		}
 		else
@@ -49,43 +51,60 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		//addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
 		match(TokenType.IDENTIFIER);
 	}
 	
 	private void matchRhs() throws ParserException {
 		if (getTokenType() == TokenType.COMMA) {
 			match(TokenType.COMMA);
-			matchRhs();
+			matchRhsElem();
+			addAstNode(popAstNode());
+			if (getTokenType() != TokenType.SEMICOLON)
+				matchRhs();
 		}
 		else if (getTokenType() == TokenType.VBAR) {
 			match(TokenType.VBAR);
-			matchRhs();
+			matchRhsElem();
+			addAstNode(popAstNode());
+			if (getTokenType() != TokenType.SEMICOLON)
+				matchRhs();
 		}
 		else if (getTokenType() == TokenType.HBAR) {  // match subtract expression
-			//pushAstNode(ParseTreeBuilder.createSubStatNode());
 			match(TokenType.HBAR);
 			matchRhsElem();
-			//addAstNode(popAstNode());
+			addAstNode(popAstNode());
 		}
 		else {
 			matchRhsElem();
-			if (getTokenType() == TokenType.COMMA || getTokenType() == TokenType.VBAR || getTokenType() == TokenType.HBAR)
+			if (getTokenType() == TokenType.COMMA) {
+				IAstNode node = popAstNode();
+				pushAstNode(ParseTreeBuilder.createListNode());
+				addAstNode(node);
 				matchRhs();
+			}
+			else if (getTokenType() == TokenType.VBAR) {
+				IAstNode node = popAstNode();
+				pushAstNode(ParseTreeBuilder.createAlterListNode());
+				addAstNode(node);
+				matchRhs();
+			}
+			else if (getTokenType() == TokenType.HBAR) {
+				IAstNode left = popAstNode();
+				pushAstNode(ParseTreeBuilder.createSubStatNode());
+				addAstNode(left);
+				matchRhs();
+			}
 		}
-		
-		//if (lookAheadType() == TokenType.SEMICOLON)
-			//return astNodes.pop();
-		//return null;
 	}
 	
 	private void matchRhsElem() throws ParserException {
 		if (getTokenType() == TokenType.NUMBER) {
-			//addAstNode(ParseTreeBuilder.createNumberNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createNumberNode(tokens.getToken()));
 			match(TokenType.NUMBER);
 		}
 		else if (getTokenType() == TokenType.STRING) {
-			//addAstNode(ParseTreeBuilder.createStrNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createStrNode(tokens.getToken()));
 			match(TokenType.STRING);
 		}
 		else if (getTokenType() == TokenType.LEFTBRACE) {
@@ -94,38 +113,35 @@ public class Parser {
 			match(TokenType.RIGHTBRACE);
 			if (isQuantifier())
 				matchQuantifier();
-			//addAstNode(popAstNode());
+			pushAstNode(popAstNode());
 		}
 		else if (getTokenType() == TokenType.LEFTSQUAREBRACE) {
+			pushAstNode(ParseTreeBuilder.createCharListNode());
 			match(TokenType.LEFTSQUAREBRACE);
 			matchCharList();
 			match(TokenType.RIGHTSQUAREBRACE);
 			if (isQuantifier())
 				matchQuantifier();
-			//addAstNode(popAstNode());
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			//pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();
-			//addAstNode(popAstNode());
 		}
-		else
-			throw new TokenTypeNotMatchException(tokens.getToken(), TokenType.NOTYPE, getTokenType());
 	}
 	
 	private void matchQuantifier() throws ParserException {
 		if (getTokenType() == TokenType.QUESTION) {
-			//setAstNodeQuantifier(QuantifierType.ZERO_OR_ONE);
+			setAstNodeQuantifier(QuantifierType.ZERO_OR_ONE);
 			match(TokenType.QUESTION);
 		}
 		else if (getTokenType() == TokenType.PLUS) {
-			//setAstNodeQuantifier(QuantifierType.ONE_OR_MORE);
+			setAstNodeQuantifier(QuantifierType.ONE_OR_MORE);
 			match(TokenType.PLUS);
 		}
 		else if (getTokenType() == TokenType.STAR) {
-			//setAstNodeQuantifier(QuantifierType.ZERO_OR_MORE);
+			setAstNodeQuantifier(QuantifierType.ZERO_OR_MORE);
 			match(TokenType.STAR);
 		}
 		else
@@ -134,8 +150,7 @@ public class Parser {
 	
 	private void matchCharList() throws ParserException {
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE) {
-			//addCharListNodeIfRequired();
-			//addAstNode(ParseTreeBuilder.createCharNode(tokens.getToken()));
+			addAstNode(ParseTreeBuilder.createCharNode(tokens.getToken()));
 			match(getTokenType());
 		}
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE)
@@ -166,7 +181,6 @@ public class Parser {
 	}
 	
 	private TokenType lookAheadType(int pos) {
-		//return tokens.getToken().getType();
 		return tokens.lookAhead(pos).getType();
 	}
 	
@@ -188,24 +202,5 @@ public class Parser {
 	
 	private void setAstNodeQuantifier(QuantifierType type) {
 		getAstNode().setQuantifier(type);
-	}
-	
-	private void addStatListNode() {
-		statListNode = ParseTreeBuilder.createStatListNode();
-	}
-	
-	private void addListNodeIfRequired() {
-		if (astNodes.peek().getType() != AstNodeType.NODELIST)
-			pushAstNode(ParseTreeBuilder.createListNode());
-	}
-	
-	private void addCharListNodeIfRequired() {
-		if (astNodes.peek().getType() != AstNodeType.CHARLIST)
-			pushAstNode(ParseTreeBuilder.createCharListNode());
-	}
-	
-	private void addAlterListNodeIfRequired() {
-		if (astNodes.peek().getType() != AstNodeType.ALTERNODELIST)
-			pushAstNode(ParseTreeBuilder.createAlterListNode());
 	}
 }

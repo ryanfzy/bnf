@@ -9,4 +9,12 @@ public class StatListNode extends AstNode {
 		return AstNodeType.STATLIST;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < getChildrenCount(); i++) {
+			builder.append(String.format("%s\n", getChild(i).toString()));
+		}
+		return builder.toString();
+	}
 }

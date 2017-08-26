@@ -8,6 +8,12 @@ public class SubStatNode extends AstNode {
 		super();
 	}
 	
+	public SubStatNode(IAstNode left, IAstNode right) {
+		super();
+		addChild(left);
+		addChild(right);
+	}
+	
 	public IAstNode left() {
 		return getChild(0);
 	}
@@ -19,5 +25,10 @@ public class SubStatNode extends AstNode {
 	@Override
 	public AstNodeType getType() {
 		return AstNodeType.SUB_STAT;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s - %s", left().toString(), right().toString());
 	}
 }
