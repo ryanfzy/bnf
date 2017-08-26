@@ -15,8 +15,10 @@ public class CharListNode extends AstNode {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
+		builder.append("[");
 		for (int i = 0; i < getChildrenCount(); i++)
 			builder.append(getChild(i).toString());
-		return builder.toString();
+		builder.append("]");
+		return builder.toString() + getQuantifierInStr();
 	}
 }

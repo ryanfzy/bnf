@@ -58,14 +58,14 @@ names = name, (#x20, name)*;
 nmtoken = (name-char)+;
 nmtokens = nmtoken, (#x20, nmtoken)*;
 
-entity-value = '"', ([^%&"] | pe-reference | reference)*, '"'
-             | "'", ([^%&'] | pe-reference | reference)*, "'";
-att-value = '"', ([^<&"] | reference)*, '"'
-          | "'", ([^<&'] | reference)*, "'";
+entity-value = ('"', ([^%&"] | pe-reference | reference)*, '"')
+             | ("'", ([^%&'] | pe-reference | reference)*, "'");
+att-value = ('"', ([^<&"] | reference)*, '"')
+          | ("'", ([^<&'] | reference)*, "'");
 system-literal = ('"', [^"]*, '"')
                | ("'", [^']*, "'");
-pubid-literal = '"', pubid-char, '"'
-              | "'", (pubid-char - "'")*, "'";
+pubid-literal = ('"', pubid-char, '"')
+              | ("'", (pubid-char - "'")*, "'");
 pubid-char = #x20
            | #xD
            | #xA

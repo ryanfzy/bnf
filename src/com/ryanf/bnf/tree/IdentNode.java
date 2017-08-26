@@ -8,6 +8,7 @@ public class IdentNode extends AstNode {
 	private IToken token;
 	
 	public IdentNode(IToken token) {
+		super();
 		this.token = token;
 	}
 
@@ -18,7 +19,7 @@ public class IdentNode extends AstNode {
 	
 	@Override
 	public String toString() {
-		return token.getName();
+		return token.getName() + getQuantifierInStr();
 	}
 	
 	@Override

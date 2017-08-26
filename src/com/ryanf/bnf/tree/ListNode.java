@@ -16,11 +16,14 @@ public class ListNode extends AstNode {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < getChildrenCount(); i++) {
-			if (builder.length() == 0)
+			if (builder.length() == 0) {
+				builder.append("(");
 				builder.append(getChild(i).toString());
+			}
 			else
 				builder.append(String.format(",%s", getChild(i).toString()));
 		}
-		return builder.toString();
+		builder.append(")");
+		return builder.toString() + getQuantifierInStr();
 	}
 }
