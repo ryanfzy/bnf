@@ -15,6 +15,10 @@ public class ParserException extends Exception {
 		message = String.format("\nLine %d, Column %d\n", token.getPos().getRow(), token.getPos().getColumn());
 	}
 	
+	public ParserException(String msg) {
+		message = msg;
+	}
+	
 	@Override
 	public String getMessage() {
 		return message;

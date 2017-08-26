@@ -1,6 +1,7 @@
 package com.ryanf.bnf.types;
 
 public enum TokenType {
+	NOTYPE,
 	IDENTIFIER,
 	ASSIGN,
 	COMMA,
@@ -19,5 +20,5 @@ public enum TokenType {
 	HAT,
 	STRING,
 	PLUS,
-	NUMBER,
+	NUMBER, 
 }
