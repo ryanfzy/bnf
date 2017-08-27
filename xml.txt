@@ -84,7 +84,7 @@ cdata = (char* - (char*, ']]>', char*));
 cdend = ']]>';
 
 element = empty-elem-tag
-        | stag, content, etag;
+        | (stag, content, etag);
 stag = '<', name, (S, attribute)*, S?, '>';
 attribtue = name, eq, att-value;
 etag = '</', name, S?, '>';
@@ -103,8 +103,8 @@ children = (choice | seq), ('?' | '*' | '+')?;
 cp = (name | choice | seq), ('?' | '*' | '+')?;
 choice = '(', S?, cp, (S?, '|', S?, cp)+, S?, ')';
 seq = '(', S?, cp, (S?, ',', S?, cp)*, S?, ')';
-mixed = '(', S?, '#PCDATA', (S?, '|', S?, name)*, S?, ')*'
-      | '(', S?, '#PCDATA', S?, ')';
+mixed = ('(', S?, '#PCDATA', (S?, '|', S?, name)*, S?, ')*')
+      | ('(', S?, '#PCDATA', S?, ')');
 
 att-list-decl = '<!ATTLIST', S, name, att-def*, S?, '>';
 att-def = S, name, S, att-type, S, default-decl;
@@ -134,8 +134,8 @@ ignore-sect = '<![', S?, 'IGNORE', S?, '[', ignore-sect-contents*, ']]>';
 ignore-sect-contents = ignore, ('<![', ignore-sect-contents, ']]>', ignore)*;
 ignore = char* - (char*, ('<![' | ']]>'), char*);
 
-char-ref = '&#', [0-9]+, ';'
-         | '&#x', [0-9a-fA-F]+, ';';
+char-ref = ('&#', [0-9]+, ';')
+         | ('&#x', [0-9a-fA-F]+, ';');
 
 reference = entity-ref
           | char-ref;
@@ -151,8 +151,8 @@ entity-def = entity-value
 pe-def = entity-value
        | external-id;
 
-external-id = 'SYSTEM', S, system-literal
-            | 'PUBLIC', S, pubid-literal, S, system-literal;
+external-id = ('SYSTEM', S, system-literal)
+            | ('PUBLIC', S, pubid-literal, S, system-literal);
 ndata-decl = S, 'NDATA', S, name;
 
 text-decl = '<?xml', version-info?, encoding-decl, S?, '?>';
