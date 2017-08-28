@@ -1,5 +1,7 @@
 package com.ryanf.bnf.tree;
 
+import java.util.Vector;
+
 import com.ryanf.bnf.types.AstNodeType;
 
 public class StatListNode extends AstNode {
@@ -16,5 +18,10 @@ public class StatListNode extends AstNode {
 			builder.append(String.format("%s\n", getChild(i).toString()));
 		}
 		return builder.toString();
+	}
+	
+	@Override
+	public Vector<String> firsts() {
+		throw new UnsupportedOperationException();
 	}
 }

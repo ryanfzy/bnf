@@ -1,5 +1,7 @@
 package com.ryanf.bnf.tree;
 
+import java.util.Vector;
+
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
@@ -30,5 +32,10 @@ public class AsignStatNode extends AstNode {
 	@Override
 	public String toString() {
 		return String.format("%s = %s", getLhs().toString(), getRhs().toString());
+	}
+	
+	@Override
+	public Vector<String> firsts(){
+		return getRhs().firsts();
 	}
 }
