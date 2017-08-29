@@ -35,21 +35,12 @@ public class Test {
 		
 		System.out.println("first:");
 		if (parseTree != null) {
-			for (int i = 0; i < parseTree.getChildrenCount(); i++)
-				printFirst(parseTree.getChild(i));
-		}
-		System.out.println("End first");
-	}
-	
-	private static void printFirst(IAstNode node) {
-		if (node != null) {
-			for (int i = 0; i < node.getChildrenCount(); i++) {
-				IAstNode child = node.getChild(i);
-				if (child.getType() == AstNodeType.IDENT)
-					printFirst(child);
-				else
-					System.out.println(node.getChild(i).firsts().toString());
+			for (int i = 0; i < parseTree.getChildrenCount(); i++) {
+				System.out.print(parseTree.getChild(i).toString());
+				System.out.print(" => ");
+				System.out.println(parseTree.getChild(i).firsts().toString());
 			}
 		}
+		System.out.println("End first");
 	}
 }

@@ -3,14 +3,17 @@ package com.ryanf.bnf.tree;
 import java.util.Vector;
 
 import com.ryanf.bnf.interfaces.IAstNode;
+import com.ryanf.bnf.interfaces.IAstNodeGetter;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class IdentNode extends AstNode {
-	private IToken token;
+	IToken token;
+	IAstNodeGetter getter;
 	
-	public IdentNode(IToken token) {
+	public IdentNode(IAstNodeGetter getter, IToken token) {
 		super();
+		this.getter = getter;
 		this.token = token;
 	}
 
@@ -31,8 +34,9 @@ public class IdentNode extends AstNode {
 	
 	@Override
 	public Vector<String> firsts(){
-		Vector<String> firsts = new Vector<String>();
-		firsts.add(token.getName());
-		return firsts;
+		IAstNode node = getter.get(token.getName());
+		if (node != null)
+			return node.firsts();
+		return new Vector<String>();
 	}
 }

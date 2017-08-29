@@ -7,6 +7,7 @@ import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.IAstNode;
+import com.ryanf.bnf.interfaces.IAstNodeGetter;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
 import com.ryanf.bnf.types.AstNodeType;
@@ -51,7 +52,7 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+		addAstNode(ParseTreeBuilder.createIdentNode((IAstNodeGetter)statListNode, tokens.getToken()));
 		match(TokenType.IDENTIFIER);
 	}
 	
@@ -124,7 +125,7 @@ public class Parser {
 				matchQuantifier();
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createIdentNode((IAstNodeGetter)statListNode, tokens.getToken()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();

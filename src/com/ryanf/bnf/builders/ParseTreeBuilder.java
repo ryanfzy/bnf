@@ -1,6 +1,7 @@
 package com.ryanf.bnf.builders;
 
 import com.ryanf.bnf.interfaces.IAstNode;
+import com.ryanf.bnf.interfaces.IAstNodeGetter;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.tree.AlterListNode;
 import com.ryanf.bnf.tree.AsignStatNode;
@@ -26,8 +27,8 @@ public class ParseTreeBuilder {
 		return new AsignStatNode(lhs, rhs);
 	}
 	
-	public static IAstNode createIdentNode(IToken token) {
-		return new IdentNode(token);
+	public static IAstNode createIdentNode(IAstNodeGetter getter, IToken token) {
+		return new IdentNode(getter, token);
 	}
 	
 	public static IAstNode createListNode() {
