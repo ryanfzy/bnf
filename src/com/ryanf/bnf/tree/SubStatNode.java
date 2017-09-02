@@ -36,8 +36,12 @@ public class SubStatNode extends AstNode {
 	
 	@Override
 	public Vector<String> firsts() {
+		Vector<String> firsts = new Vector<String>();
+		firsts.add(toString());
+		return firsts;
+		/*
 		Vector<String> firsts = left().firsts();
 		firsts.removeAll(right().firsts());
-		return firsts;
+		return firsts;*/
 	}
 }
