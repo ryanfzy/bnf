@@ -12,4 +12,5 @@ public enum AstNodeType {
 	CHAR, 
 	ALTERNODELIST, 
 	SUB_STAT,
+	CHAR_RANGE,
 }

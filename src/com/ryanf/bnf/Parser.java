@@ -151,8 +151,16 @@ public class Parser {
 	
 	private void matchCharList() throws ParserException {
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE) {
-			addAstNode(ParseTreeBuilder.createCharNode(tokens.getToken()));
+			IAstNode node = ParseTreeBuilder.createCharNode(tokens.getToken());
 			match(getTokenType());
+			if (getTokenType() == TokenType.HBAR) {
+				match(TokenType.HBAR);
+				addAstNode(ParseTreeBuilder.createCharRangeNode(node, ParseTreeBuilder.createCharNode(tokens.getToken())));
+				match(getTokenType());
+			}
+			else {
+				addAstNode(ParseTreeBuilder.createCharNode(tokens.getToken()));
+			}
 		}
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE)
 			matchCharList();

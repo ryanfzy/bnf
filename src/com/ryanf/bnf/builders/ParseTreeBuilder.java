@@ -7,6 +7,7 @@ import com.ryanf.bnf.tree.AlterListNode;
 import com.ryanf.bnf.tree.AsignStatNode;
 import com.ryanf.bnf.tree.CharListNode;
 import com.ryanf.bnf.tree.CharNode;
+import com.ryanf.bnf.tree.CharRangeNode;
 import com.ryanf.bnf.tree.IdentNode;
 import com.ryanf.bnf.tree.ListNode;
 import com.ryanf.bnf.tree.NumberNode;
@@ -61,5 +62,9 @@ public class ParseTreeBuilder {
 	
 	public static IAstNode createSubStatNode(IAstNode left, IAstNode right) {
 		return new SubStatNode(left, right);
+	}
+	
+	public static IAstNode createCharRangeNode(IAstNode from, IAstNode to) {
+		return new CharRangeNode(from, to);
 	}
 }
