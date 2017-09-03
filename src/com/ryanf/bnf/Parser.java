@@ -8,8 +8,10 @@ import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstNodeGetter;
+import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
+import com.ryanf.bnf.tree.AstTree;
 import com.ryanf.bnf.types.AstNodeType;
 import com.ryanf.bnf.types.QuantifierType;
 import com.ryanf.bnf.types.TokenType;
@@ -28,14 +30,14 @@ public class Parser {
 		statListNode = ParseTreeBuilder.createStatListNode();
 	}
 	
-	public IAstNode parse() throws ParserException {
+	public IAstTree parse() throws ParserException {
 		init();
 		tokens.next();
 		while (tokens.hasMore()) {
 			parseRule();
 			statListNode.addChild(popAstNode());
 		}
-		return statListNode;
+		return new AstTree(statListNode);
 	}
 	
 	private void parseRule() throws ParserException {
@@ -52,7 +54,7 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		addAstNode(ParseTreeBuilder.createIdentNode((IAstNodeGetter)statListNode, tokens.getToken()));
+		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
 		match(TokenType.IDENTIFIER);
 	}
 	
@@ -125,7 +127,7 @@ public class Parser {
 				matchQuantifier();
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			pushAstNode(ParseTreeBuilder.createIdentNode((IAstNodeGetter)statListNode, tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();

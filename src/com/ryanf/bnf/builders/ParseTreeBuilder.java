@@ -28,8 +28,8 @@ public class ParseTreeBuilder {
 		return new AsignStatNode(lhs, rhs);
 	}
 	
-	public static IAstNode createIdentNode(IAstNodeGetter getter, IToken token) {
-		return new IdentNode(getter, token);
+	public static IAstNode createIdentNode(IToken token) {
+		return new IdentNode(token);
 	}
 	
 	public static IAstNode createListNode() {

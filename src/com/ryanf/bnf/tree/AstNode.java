@@ -37,7 +37,10 @@ public abstract class AstNode implements IAstNode {
 	}
 	
 	public abstract AstNodeType getType();
-	public abstract Vector<String> firsts();
+	
+	public String getName() {
+		return "";
+	}
 	
 	public void setQuantifier(QuantifierType type) {
 		quantifier = type;

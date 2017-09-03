@@ -1,7 +1,5 @@
 package com.ryanf.bnf.tree;
 
-import java.util.Vector;
-
 import com.ryanf.bnf.types.AstNodeType;
 
 public class ListNode extends AstNode {
@@ -27,10 +25,5 @@ public class ListNode extends AstNode {
 		}
 		builder.append(")");
 		return builder.toString() + getQuantifierInStr();
-	}
-	
-	@Override
-	public Vector<String> firsts(){
-		return getChild(0).firsts();
 	}
 }

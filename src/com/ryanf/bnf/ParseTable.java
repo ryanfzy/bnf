@@ -28,9 +28,15 @@ public class ParseTable implements IParseTable {
 			row.add(-1);
 	}
 	
-	public void setEntry(String row, String column, String toRow) {
-		if (hasEntry(row, column))
-			table.get(getRow(row)).set(getCol(column), getRow(toRow));
+	public void setEntry(String row, String column, String rowOrColumn) {
+		if (hasEntry(row, column)) {
+			int entry = -1;
+			if (hasRow(rowOrColumn))
+				entry = getRow(rowOrColumn);
+			else if (hasColumn(rowOrColumn))
+				entry = 100 + getCol(rowOrColumn);
+			table.get(getRow(row)).set(getCol(column), entry);
+		}
 	}
 
 	public int getEntry(String rowName, String colName) {
@@ -71,5 +77,13 @@ public class ParseTable implements IParseTable {
 		for (String col : colNames)
 			clone.add(col);
 		return clone;
+	}
+	
+	public boolean hasRow(String name) {
+		return rowNames.contains(name);
+	}
+	
+	public boolean hasColumn(String name) {
+		return colNames.contains(name);
 	}
 }
