@@ -10,42 +10,68 @@ import com.ryanf.bnf.interfaces.IParseTable;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class ParseTableBuilder {
+	ParseTable table;
+	Vector<String> addedRows;
+	Vector<String> addedCols;
+	
+	private ParseTableBuilder() {
+		init();
+	}
+	
+	private void init() {
+		table = new ParseTable();
+		addedRows = new Vector<String>();
+		addedCols = new Vector<String>();
+	}
+	
+	private void addRow(String rowName) {
+		if (!addedRows.contains(rowName)) {
+			table.addRow(rowName);
+			addedRows.add(rowName);
+		}
+	}
+	
+	private void addColumn(String colName) {
+		if (!addedCols.contains(colName)) {
+			table.addColumn(colName);
+			addedCols.add(colName);
+		}
+	}
+	
+	private void setEntries(IAstTree tree, String rowName, IAstNode firstNode) {
+		for (String first : AstNodeHelper.getFirsts(tree, firstNode)) {
+			addColumn(first);
+			if (firstNode.getType() == AstNodeType.IDENT)
+				table.setEntry(rowName, first, firstNode.toString());
+			else
+				table.setEntry(rowName, first, first);
+		}
+	}
+	
 	public static IParseTable createParseTable(IAstTree tree) {
 		if (tree.getRoot().getType() == AstNodeType.STATLIST) {
-			Vector<String> addedRows = new Vector<String>();
-			Vector<String> addedCols = new Vector<String>();
-		
+			
+			ParseTableBuilder builder = new ParseTableBuilder();		
 			IAstNode statListNode = tree.getRoot();
-			ParseTable table = new ParseTable();
 		
 			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
 				IAstNode lhs = statListNode.getChild(i).getChild(0);
-				if (!addedRows.contains(lhs.toString())) {
-					table.addRow(lhs.toString());
-					addedRows.add(lhs.toString());
-				}
+				builder.addRow(lhs.toString());
 			}
 			
 			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
-				IAstNode statNode = statListNode.getChild(i);
-				IAstNode firstNode = statNode.getChild(1);
+				IAstNode lhs = statListNode.getChild(i).getChild(0);
+				IAstNode rhs = statListNode.getChild(i).getChild(1);
 				
-				if (firstNode.getType() == AstNodeType.NODELIST || firstNode.getType() == AstNodeType.ALTERNODELIST)
-					firstNode = firstNode.getChild(0);
-				
-				for (String first : AstNodeHelper.GetFirsts(tree, statNode)) {
-					if (!addedCols.contains(first)) {
-						table.addColumn(first);
-						addedCols.add(first);
-					}
-					if (firstNode.getType() == AstNodeType.IDENT)
-						table.setEntry(statNode.getChild(0).toString(), first, firstNode.toString());
-					else
-						table.setEntry(statNode.getChild(0).toString(), first, first);
-				}			
+				if (rhs.getType() == AstNodeType.NODELIST)
+					builder.setEntries(tree, lhs.toString(), rhs.getChild(0));
+				else if (rhs.getType() == AstNodeType.ALTERNODELIST) {
+					for (int j = 0 ; j < rhs.getChildrenCount(); j++)
+						builder.setEntries(tree, lhs.toString(), rhs.getChild(j));
+				}
 			}
 			
-			return table;
+			return builder.table;
 		}
 		return null;
 	}
