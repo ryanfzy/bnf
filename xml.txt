@@ -83,28 +83,26 @@ cdstart = '<![CDATA[';
 cdata = (char* - (char*, ']]>', char*));
 cdend = ']]>';
 
-element = empty-elem-tag
-        | (stag, content, etag);
-stag = '<', name, (S, attribute)*, S?, '>';
+element = '<', name, (S, attribute)*, S?, (empty-elem-tag | (stag, content, etag));
+stag = '>';
 attribtue = name, eq, att-value;
 etag = '</', name, S?, '>';
 
 content = char-data?, ((element | reference | cdsect | pi | comment), char-data?)*;
 
-empty-elem-tag = '<', name, (S, attribute)*, S?, '/>';
+empty-elem-tag = '/>';
 
 element-decl = '<!ELEMENT', S, name, S, content-spec, S?, '>';
 content-spec = 'EMPTY'
              | 'ANY'
-             | mixed
-             | children;
+             | ('(', S?, (mixed | children));
 
-children = (choice | seq), ('?' | '*' | '+')?;
-cp = (name | choice | seq), ('?' | '*' | '+')?;
-choice = '(', S?, cp, (S?, '|', S?, cp)+, S?, ')';
-seq = '(', S?, cp, (S?, ',', S?, cp)*, S?, ')';
-mixed = ('(', S?, '#PCDATA', (S?, '|', S?, name)*, S?, ')*')
-      | ('(', S?, '#PCDATA', S?, ')');
+children = choice-or-seq, ('?' | '*' | '+')?;
+cp = (name | ('(', S?, choice-or-seq)), ('?' | '*' | '+')?;
+choice = ('|', S?, cp, S?)+, ')';
+seq = (',', S?, cp, S?)*, ')';
+choice-or-seq = cp, S?, (choice | seq);
+mixed = '#PCDATA', S?, ((('|', S?, name, S?)*, ')*') | ')');
 
 att-list-decl = '<!ATTLIST', S, name, att-def*, S?, '>';
 att-def = S, name, S, att-type, S, default-decl;
@@ -127,10 +125,9 @@ default-decl = '#REQUIRED'
              | '#IMPLIED'
              | (('#FIXED', S)?, att-value);
 
-conditional-sect = include-sect
-                 | ignore-sect;
-include-sect = '<![', S?, 'INCLUDE', S?, '[', ext-subset-decl, ']]>';
-ignore-sect = '<![', S?, 'IGNORE', S?, '[', ignore-sect-contents*, ']]>';
+conditional-sect = '<![', S?, (include-sect | ignore-sect);
+include-sect = 'INCLUDE', S?, '[', ext-subset-decl, ']]>';
+ignore-sect = 'IGNORE', S?, '[', ignore-sect-contents*, ']]>';
 ignore-sect-contents = ignore, ('<![', ignore-sect-contents, ']]>', ignore)*;
 ignore = char* - (char*, ('<![' | ']]>'), char*);
 
@@ -142,10 +139,9 @@ reference = entity-ref
 entity-ref = '&', name, ';';
 pe-reference = '%', name, ';';
 
-entity-decl = ge-decl
-            | pe-decl;
-ge-decl = '<!ENTITY', S, name, S, entity-def, S?, '>';
-pe-decl = '<!ENTITY', S, '%', S, name, S, pe-def, S?, '>';
+entity-decl = '<!ENTITY', S, (ge-decl | pe-decl);
+ge-decl =  name, S, entity-def, S?, '>';
+pe-decl = '%', S, name, S, pe-def, S?, '>';
 entity-def = entity-value
            | (external-id, ndata-decl?);
 pe-def = entity-value
