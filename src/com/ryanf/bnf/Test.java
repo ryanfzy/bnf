@@ -1,6 +1,5 @@
 package com.ryanf.bnf;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -16,8 +15,8 @@ import com.ryanf.bnf.interfaces.IParseTable;
 public class Test {
 
 	public static void main(String[] args) {
-		String filePath = "D:\\eclipse-workspace\\bnf\\xml1.txt";
-		String tableHtml = "D:\\eclipse-workspace\\bnf\\table1.html";
+		String filePath = "D:\\eclipse-workspace\\bnf\\xml.txt";
+		String tableHtml = "D:\\eclipse-workspace\\bnf\\table.html";
 	
 		//System.out.println("Start");
 		Parser parser = ParserBuilder.createParser(filePath);
@@ -37,19 +36,25 @@ public class Test {
 			for (int i = 0; i < root.getChildrenCount(); i++) {
 				System.out.println(root.getChild(i).toString());
 				System.out.print(" => ");
-				System.out.println(AstNodeHelper.GetFirsts(tree, root.getChild(i)).toString());
+				try {
+					System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return;
+				}
 			}
 		}
 		System.out.println("End first");
 		
 		//System.out.println("row names:");
-		IParseTable table = ParseTableBuilder.createParseTable(tree);
-		
+		IParseTable table = null;
 		try {
+			table = ParseTableBuilder.createParseTable(tree);
 			Files.write(Paths.get(tableHtml), ParseTableHelper.toHtml(table).getBytes());
-		} catch (IOException e) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 }
