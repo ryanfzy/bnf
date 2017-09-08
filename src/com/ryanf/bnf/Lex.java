@@ -20,6 +20,8 @@ public class Lex {
 	public static char SemiColon = ';';
 	public static char Plus = '+';
 	
+	public static String EmptyNode = "e";
+	
 	public static boolean matchQuote(char ch) {
 		return ch == Lex.Quote || ch == Lex.DoubleQuote;
 	}

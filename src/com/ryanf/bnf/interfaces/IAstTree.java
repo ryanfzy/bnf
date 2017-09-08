@@ -1,6 +1,8 @@
 package com.ryanf.bnf.interfaces;
 
+import java.util.Vector;
+
 public interface IAstTree {
 	IAstNode getRoot();
-	IAstNode getNode(String name);
+	Vector<IAstNode> getNodes(String name);
 }

@@ -2,6 +2,7 @@ package com.ryanf.bnf.helpers;
 
 import java.util.Vector;
 
+import com.ryanf.bnf.Lex;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.types.AstNodeType;
@@ -10,7 +11,9 @@ public class AstNodeHelper {
 	public static Vector<String> getFirsts(IAstTree tree, IAstNode node) throws Exception {
 		Vector<String> firsts = new Vector<String>();
 		if (tree != null && node != null) {
-			if (node.getType() == AstNodeType.ASIGN_STAT)
+			if (node.getType() == AstNodeType.EMPTY)
+				add(firsts, Lex.EmptyNode);
+			else if (node.getType() == AstNodeType.ASIGN_STAT)
 				add(firsts, getFirsts(tree, node.getChild(1)));
 			else if (node.getType() == AstNodeType.ALTERNODELIST) {
 				for (int i = 0; i < node.getChildrenCount(); i++)
@@ -25,8 +28,8 @@ public class AstNodeHelper {
 					 node.getType() == AstNodeType.SUB_STAT)
 				add(firsts, node.toString());
 			else if (node.getType() == AstNodeType.IDENT) {
-				IAstNode identNode = tree.getNode(node.getName());
-				if (node != null)
+				Vector<IAstNode> identNodes = tree.getNodes(node.getName());
+				for (IAstNode identNode : identNodes)
 					add(firsts, getFirsts(tree, identNode));
 			}
 			else if (node.getType() == AstNodeType.NODELIST)
