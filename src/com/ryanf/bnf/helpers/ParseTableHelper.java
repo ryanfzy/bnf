@@ -1,5 +1,7 @@
 package com.ryanf.bnf.helpers;
 
+import java.util.Vector;
+
 import com.ryanf.bnf.interfaces.IParseTable;
 
 public class ParseTableHelper {
@@ -7,22 +9,32 @@ public class ParseTableHelper {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("<table border=\"1\" style=\"white-space:nowrap;\">");
 		
+		Vector<String> columns = table.getColumns();
+		
+		// write column indexes
+		strBuilder.append("<tr>");
+		strBuilder.append("<th></th><th></th>");
+		for (int i = 0; i < columns.size(); i++)
+			strBuilder.append("<th>" + i + "</th>");
+		strBuilder.append("</tr>");
+		
 		// write column titles
 		strBuilder.append("<tr>");
-		strBuilder.append("<th></th>");
-		int num = 0;
+		strBuilder.append("<th></th><th></th>");
 		for (String column : table.getColumns())
-			strBuilder.append("<th>" + "(" + num++ + ")" + escapeHtml(column) + "</th>");
+			strBuilder.append("<th>" + escapeHtml(column) + "</th>");
 		strBuilder.append("</tr>");
 		
 		// write rows
-		num = 0;
+		int num = 0;
 		for (String row : table.getRows()) {
 			strBuilder.append("<tr>");
+			//writer row index
+			strBuilder.append("<th>" + num++ + "</th>");
 			// write row title
-			strBuilder.append("<th>" + "(" + num++ + ")" + row + "</th>");
+			strBuilder.append("<th>" + row + "</th>");
 			//write entries
-			for (String column : table.getColumns()) {
+			for (String column : columns) {
 				int entry = table.getEntry(row, column);
 				strBuilder.append("<td>" + (entry > -1 ? entry : "") + "</td>");
 			}

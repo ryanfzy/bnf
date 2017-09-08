@@ -36,10 +36,22 @@ public abstract class AstNode implements IAstNode {
 		return null;
 	}
 	
+	public void setChild(int pos, IAstNode child) {
+		if (pos > -1 && pos < children.size())
+			children.set(pos, child);
+	}
+	
 	public abstract AstNodeType getType();
 	
 	public String getName() {
 		return "";
+	}
+	
+	public void setName(String name) {
+	}
+	
+	public QuantifierType getQuantifier() {
+		return quantifier;
 	}
 	
 	public void setQuantifier(QuantifierType type) {

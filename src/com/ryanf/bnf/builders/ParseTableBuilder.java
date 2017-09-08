@@ -70,7 +70,7 @@ public class ParseTableBuilder {
 			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
 				IAstNode lhs = statListNode.getChild(i).getChild(0);
 				IAstNode rhs = statListNode.getChild(i).getChild(1);
-				builder.setEntries(tree, lhs.toString(), rhs);
+				builder.setEntries(tree, lhs.getName(), rhs);
 			}
 			
 			return builder.table;

@@ -5,16 +5,25 @@ import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class IdentNode extends AstNode {
-	IToken token;
+	String name;
 	
-	public IdentNode(IToken token) {
+	public IdentNode(String name) {
 		super();
-		this.token = token;
+		this.name = name;
+	}
+	
+	public IdentNode(IdentNode node) {
+		this(node.name);
 	}
 	
 	@Override
 	public String getName() {
-		return token.getName();
+		return name;
+	}
+	
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -24,11 +33,11 @@ public class IdentNode extends AstNode {
 	
 	@Override
 	public String toString() {
-		return token.getName() + getQuantifierInStr();
+		return name + getQuantifierInStr();
 	}
 	
 	@Override
 	public void addChild(IAstNode child) {
-		throw new UnsupportedOperationException(token.getName());
+		throw new UnsupportedOperationException(name);
 	}
 }

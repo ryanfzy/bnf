@@ -1,5 +1,7 @@
 package com.ryanf.bnf;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import com.ryanf.bnf.builders.ParseTreeBuilder;
@@ -7,7 +9,6 @@ import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstNodeGetter;
 import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
@@ -54,7 +55,7 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken().getName()));
 		match(TokenType.IDENTIFIER);
 	}
 	
@@ -127,7 +128,7 @@ public class Parser {
 				matchQuantifier();
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken().getName()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();

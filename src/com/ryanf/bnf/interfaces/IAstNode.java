@@ -8,6 +8,9 @@ public interface IAstNode {
 	 IAstNode getChild(int index);
 	 int getChildrenCount();
 	 AstNodeType getType();
+	 QuantifierType getQuantifier();
 	 void setQuantifier(QuantifierType type);
 	 String getName();
+	 void setName(String name);
+	 void setChild(int pos, IAstNode child);
 }

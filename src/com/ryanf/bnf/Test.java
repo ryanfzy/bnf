@@ -7,6 +7,7 @@ import com.ryanf.bnf.builders.ParseTableBuilder;
 import com.ryanf.bnf.builders.ParserBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.helpers.AstNodeHelper;
+import com.ryanf.bnf.helpers.AstTreeNormaliser;
 import com.ryanf.bnf.helpers.ParseTableHelper;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
@@ -23,6 +24,7 @@ public class Test {
 		IAstTree tree = null;
 		try {
 			tree = parser.parse();
+			AstTreeNormaliser.normalise(tree);
 			//System.out.println(tree.getRoot().toString());
 		} catch (ParserException e) {
 			e.printStackTrace();
@@ -35,6 +37,7 @@ public class Test {
 			IAstNode root = tree.getRoot();
 			for (int i = 0; i < root.getChildrenCount(); i++) {
 				System.out.println(root.getChild(i).toString());
+				/*
 				System.out.print(" => ");
 				try {
 					System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
@@ -42,7 +45,7 @@ public class Test {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return;
-				}
+				}*/
 			}
 		}
 		System.out.println("End first");
