@@ -1,5 +1,6 @@
 package com.ryanf.bnf.tree;
 
+import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class CharListNode extends AstNode {
@@ -20,5 +21,14 @@ public class CharListNode extends AstNode {
 			builder.append(getChild(i).toString());
 		builder.append("]");
 		return builder.toString() + getQuantifierInStr();
+	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		for (int i = 0; i < getChildrenCount(); i++) {
+			if (getChild(i).equals(node))
+				return true;
+		}
+		return false;
 	}
 }

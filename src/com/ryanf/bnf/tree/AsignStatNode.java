@@ -32,4 +32,9 @@ public class AsignStatNode extends AstNode {
 	public String toString() {
 		return String.format("%s = %s", getLhs().toString(), getRhs().toString());
 	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		return getRhs().contains(node);
+	}
 }

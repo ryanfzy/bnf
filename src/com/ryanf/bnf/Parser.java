@@ -1,7 +1,5 @@
 package com.ryanf.bnf;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 import com.ryanf.bnf.builders.ParseTreeBuilder;
@@ -10,10 +8,8 @@ import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
 import com.ryanf.bnf.tree.AstTree;
-import com.ryanf.bnf.types.AstNodeType;
 import com.ryanf.bnf.types.QuantifierType;
 import com.ryanf.bnf.types.TokenType;
 

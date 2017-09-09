@@ -13,4 +13,5 @@ public interface IAstNode {
 	 String getName();
 	 void setName(String name);
 	 void setChild(int pos, IAstNode child);
+	 boolean contains(IAstNode node);
 }

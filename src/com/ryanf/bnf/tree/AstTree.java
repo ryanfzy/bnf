@@ -2,6 +2,7 @@ package com.ryanf.bnf.tree;
 
 import java.util.Vector;
 
+import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
 
@@ -24,5 +25,16 @@ public class AstTree implements IAstTree {
 				nodes.add(statListNode.getChild(i).getChild(1));
 		}
 		return nodes;
+	}
+	
+	public boolean contains(String identName, IAstNode node) {
+		for (IAstNode rhs : getNodes(identName))
+			if (rhs.contains(node))
+				return true;
+		return false;
+	}
+	
+	public boolean containsEmptyNode(String identName) {
+		return contains(identName, ParseTreeBuilder.createEmptyNode());
 	}
 }

@@ -20,4 +20,9 @@ public class CharRangeNode extends AstNode {
 	public String toString() {
 		return String.format("%s-%s", getChild(0).toString(), getChild(1).toString());
 	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		return equals(node);
+	}
 }

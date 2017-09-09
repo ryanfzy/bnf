@@ -1,5 +1,6 @@
 package com.ryanf.bnf.tree;
 
+import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class StatListNode extends AstNode {
@@ -16,5 +17,10 @@ public class StatListNode extends AstNode {
 			builder.append(String.format("%s\n", getChild(i).toString()));
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		throw new UnsupportedOperationException();
 	}
 }

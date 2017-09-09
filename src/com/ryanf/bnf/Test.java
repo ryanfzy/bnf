@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.ryanf.bnf.builders.ParseTableBuilder;
+import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.builders.ParserBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.helpers.AstNodeHelper;
@@ -36,16 +37,19 @@ public class Test {
 		if (tree != null) {
 			IAstNode root = tree.getRoot();
 			for (int i = 0; i < root.getChildrenCount(); i++) {
-				System.out.println(root.getChild(i).toString());
-				/*
-				System.out.print(" => ");
+				System.out.println("("+i+")"+root.getChild(i).toString());
 				try {
+					System.out.print(" => ");
 					System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
+					if (root.getChild(i).getChild(1).contains(ParseTreeBuilder.createEmptyNode())) {
+						System.out.print(" => ");
+						System.out.println(AstNodeHelper.getFollows(tree, root.getChild(i)));
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return;
-				}*/
+				}
 			}
 		}
 		System.out.println("End first");

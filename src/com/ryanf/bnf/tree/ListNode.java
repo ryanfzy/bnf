@@ -1,5 +1,6 @@
 package com.ryanf.bnf.tree;
 
+import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class ListNode extends AstNode {
@@ -25,5 +26,18 @@ public class ListNode extends AstNode {
 		}
 		builder.append(")");
 		return builder.toString() + getQuantifierInStr();
+	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		for (int i = 0; i < getChildrenCount(); i++) {
+			if (getChild(i).equals(node))
+				return true;
+		}
+		for (int i = 0; i < getChildrenCount(); i++) {
+			if (getChild(i).contains(node))
+				return true;
+		}
+		return false;
 	}
 }

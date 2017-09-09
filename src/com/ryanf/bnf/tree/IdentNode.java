@@ -40,4 +40,9 @@ public class IdentNode extends AstNode {
 	public void addChild(IAstNode child) {
 		throw new UnsupportedOperationException(name);
 	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		return equals(node);
+	}
 }

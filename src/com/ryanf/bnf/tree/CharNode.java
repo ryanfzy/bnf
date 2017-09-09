@@ -25,4 +25,9 @@ public class CharNode extends AstNode {
 	public void addChild(IAstNode child) {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public boolean contains(IAstNode node) {
+		return equals(node);
+	}
 }

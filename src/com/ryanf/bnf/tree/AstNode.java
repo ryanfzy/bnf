@@ -42,6 +42,7 @@ public abstract class AstNode implements IAstNode {
 	}
 	
 	public abstract AstNodeType getType();
+	public abstract boolean contains(IAstNode node);
 	
 	public String getName() {
 		return "";
@@ -70,5 +71,10 @@ public abstract class AstNode implements IAstNode {
 			break;
 		}
 		return "";
+	}
+	
+	@Override
+	public boolean equals(Object otherNode) {
+		return this.toString().equals(otherNode.toString());
 	}
 }
