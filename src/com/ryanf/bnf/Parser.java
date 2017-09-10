@@ -158,7 +158,7 @@ public class Parser {
 				match(getTokenType());
 			}
 			else {
-				addAstNode(ParseTreeBuilder.createCharNode(tokens.getToken()));
+				addAstNode(node);
 			}
 		}
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE)
