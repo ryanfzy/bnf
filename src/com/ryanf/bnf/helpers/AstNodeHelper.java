@@ -3,12 +3,12 @@ package com.ryanf.bnf.helpers;
 import java.util.Vector;
 
 import com.ryanf.bnf.Lex;
-import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class AstNodeHelper {
+	/*
 	public static Vector<String> getFirsts(IAstTree tree, IAstNode node) throws Exception {
 		return getFirsts(tree, node, true);
 	}
@@ -55,8 +55,9 @@ public class AstNodeHelper {
 	private static void add(Vector<String> firsts1, Vector<String> firsts2) throws Exception {
 		for (String first : firsts2)
 			add(firsts1, first);
-	}
+	}*/
 	
+	/*
 	private static void addFollows(Vector<String> follow1, Vector<String>follow2) {
 		for (String follow : follow2) {
 			if (!follow1.contains(follow))
@@ -81,7 +82,7 @@ public class AstNodeHelper {
 							for (int j = 0; j < childrenCount; j++) {
 								if (rhs.getChild(j).equals(node)) {
 									if (j < childrenCount-1)
-										addFollows(follows, getFirsts(tree, rhs.getChild(j+1), false));
+										addFollows(follows, tree.getAllFirsts(rhs.getChild(j+1)));
 									if ((j == childrenCount-1 || (j == childrenCount-2 && tree.containsEmptyNode(rhs.getChild(j+1).getName()))))
 										addFollows(follows, getFollows(tree, lhs));
 									break;
@@ -95,5 +96,5 @@ public class AstNodeHelper {
 			}
 		}
 		return follows;
-	}
+	}*/
 }

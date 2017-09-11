@@ -2,7 +2,10 @@ package com.ryanf.bnf.helpers;
 
 import java.util.Vector;
 
+import com.ryanf.bnf.interfaces.IAstNode;
+import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
+import com.ryanf.bnf.types.AstNodeType;
 
 public class ParseTableHelper {
 	public static String toHtml(IParseTable table) {
@@ -46,5 +49,55 @@ public class ParseTableHelper {
 	
 	private static String escapeHtml(String str) {
 		return str.replace("<", "&lt;").replace(">", "&gt;");
+	}
+	
+	public static void setTableEntries(IAstTree tree, IParseTable table) {
+		if (tree != null && table != null) {
+			
+			// set firsts
+			IAstNode statListNode = tree.getRoot();
+			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
+				IAstNode lhs = statListNode.getChild(i).getChild(0);
+				IAstNode rhs = statListNode.getChild(i).getChild(1);
+				Vector<IAstNode> nodes = null;
+				int productId = 0;
+				if (rhs.getType() == AstNodeType.NODELIST) {
+					nodes = tree.getAsignNodes(rhs.getChild(0).getName());
+					productId = table.getProductId(rhs.getChild(0).getName());
+				}
+				else {
+					nodes = tree.getAsignNodes(rhs.getName());
+					productId = table.getProductId(rhs.getName());
+				}
+
+				for (int j = 0; j < nodes.size(); j++) {
+					try {
+						for (String first : tree.getFirsts(nodes.get(j).getChild(1))) {
+							table.setEntry(lhs.getName(), first, productId);
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+			// set follows
+			for (String row : table.getRows()) {
+				int productId = table.getProductId(row) + 1;
+				if (tree.containsEmptyNode(row)) {
+					Vector<IAstNode> nodes = tree.getAsignNodes(row);
+					for (int i = 0; i < nodes.size(); i++) {
+						try {
+							for (String follow : tree.getFollows(nodes.get(i).getChild(0)))
+								table.setEntry(row, follow, productId + i);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 }

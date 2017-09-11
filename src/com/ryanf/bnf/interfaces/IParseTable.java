@@ -12,4 +12,8 @@ public interface IParseTable {
 	void addRow(String name);
 	void addColumn(String name);
 	void setEntry(String row, String column, String toRow);
+	void setEntry(String row, String column, int entry);
+	
+	int getProductId(String name);
+	int getTokenId(String name);
 }

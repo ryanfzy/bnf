@@ -2,10 +2,12 @@ package com.ryanf.bnf;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Vector;
 
 import com.ryanf.bnf.builders.ParseTableBuilder;
 import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.builders.ParserBuilder;
+import com.ryanf.bnf.builders.ProductTableBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.helpers.AstNodeHelper;
 import com.ryanf.bnf.helpers.AstTreeNormaliser;
@@ -40,10 +42,11 @@ public class Test {
 				System.out.println("("+i+")"+root.getChild(i).toString());
 				try {
 					System.out.print(" => ");
-					System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
+					//System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
+					System.out.println(tree.getAllFirsts(root.getChild(i)).toString());
 					if (root.getChild(i).getChild(1).contains(ParseTreeBuilder.createEmptyNode())) {
 						System.out.print(" => ");
-						System.out.println(AstNodeHelper.getFollows(tree, root.getChild(i)));
+						System.out.println(tree.getFollows(root.getChild(i)));
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -53,11 +56,15 @@ public class Test {
 			}
 		}
 		System.out.println("End first");
-		
+
 		//System.out.println("row names:");
 		IParseTable table = null;
 		try {
 			table = ParseTableBuilder.createParseTable(tree);
+			Vector<String> products = ProductTableBuilder.createProductTable(tree, table);
+			ParseTableHelper.setTableEntries(tree, table);
+			for (String product : products)
+				System.out.println(product);
 			Files.write(Paths.get(tableHtml), ParseTableHelper.toHtml(table).getBytes());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

@@ -37,7 +37,7 @@ public class ParseTableBuilder {
 			addedCols.add(colName);
 		}
 	}
-	
+	/*
 	private void setEntries(IAstTree tree, String rowName, IAstNode firstNode) throws Exception {
 		if (firstNode.getType() == AstNodeType.NODELIST)
 			setEntries(tree, rowName, firstNode.getChild(0));
@@ -54,7 +54,7 @@ public class ParseTableBuilder {
 					table.setEntry(rowName, first, first);
 			}
 		}
-	}
+	}*/
 	
 	public static IParseTable createParseTable(IAstTree tree) throws Exception {
 		if (tree.getRoot().getType() == AstNodeType.STATLIST) {
@@ -62,16 +62,28 @@ public class ParseTableBuilder {
 			ParseTableBuilder builder = new ParseTableBuilder();		
 			IAstNode statListNode = tree.getRoot();
 		
-			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
+			// add rows
+			int childrenCount = statListNode.getChildrenCount();
+			for (int i = 0; i < childrenCount; i++) {
 				IAstNode lhs = statListNode.getChild(i).getChild(0);
-				builder.addRow(lhs.toString());
+				builder.addRow(lhs.toString());	
 			}
 			
+			// add columns
+			for (int i = 0; i < childrenCount; i++) {
+				IAstNode firstNode = statListNode.getChild(i).getChild(1);
+				if (firstNode.getType() == AstNodeType.NODELIST)
+					firstNode = firstNode.getChild(0);
+				for (String first : tree.getAllFirsts(firstNode))
+					builder.addColumn(first);
+			}
+			
+			/*
 			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
 				IAstNode lhs = statListNode.getChild(i).getChild(0);
 				IAstNode rhs = statListNode.getChild(i).getChild(1);
 				builder.setEntries(tree, lhs.getName(), rhs);
-			}
+			}*/
 			
 			return builder.table;
 		}

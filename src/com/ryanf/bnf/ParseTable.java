@@ -40,13 +40,14 @@ public class ParseTable implements IParseTable {
 	}
 
 	public int getEntry(String rowName, String colName) {
-		if (hasEntry(rowName, colName))
+		if (hasEntry(rowName, colName)) {
 			return table.get(getRow(rowName)).get(getCol(colName));
+		}
 		return -1;
 	}
 	
 	private boolean hasEntry(String rowName, String colName) {
-		return rowName.contains(rowName) && colName.contains(colName);
+		return rowNames.contains(rowName) && colNames.contains(colName);
 	}
 	
 	private int getRow(String name) {
@@ -85,5 +86,29 @@ public class ParseTable implements IParseTable {
 	
 	public boolean hasColumn(String name) {
 		return colNames.contains(name);
+	}
+	
+	public int getProductId(String name) {
+		if (hasRow(name))
+			return getRow(name);
+		return 999;
+	}
+	
+	public int getTokenId(String name) {
+		if (hasColumn(name))
+			return getCol(name);
+		return 999;
+	}
+
+	public void setEntry(String row, String column, int entry) {
+		ensure(row, column);
+		table.get(getRow(row)).set(getCol(column), entry);
+	}
+	
+	private void ensure(String row, String column) {
+		if (!hasRow(row))
+			addRow(row);
+		if (!hasColumn(column))
+			addColumn(column);
 	}
 }
