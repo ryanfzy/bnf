@@ -12,7 +12,7 @@ public class ParserException extends Exception {
 	}
 	
 	public ParserException(IToken token) {
-		message = String.format("\nLine %d, Column %d\n", token.getPos().getRow(), token.getPos().getColumn());
+		message = String.format("\nLine %d, Column %d\n", token.getPos().getLine(), token.getPos().getColumn());
 	}
 	
 	public ParserException(String msg) {

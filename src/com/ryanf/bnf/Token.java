@@ -9,10 +9,10 @@ public class Token implements IToken {
 	TokenType type;
 	TokenPos pos;
 	
-	public Token(String name, TokenType type, int column, int row) {
+	public Token(String name, TokenType type, int column, int line) {
 		this.name = name;
 		this.type = type;
-		pos = new TokenPos(column, row);
+		pos = new TokenPos(column, line);
 	}
 	
 	public TokenType getType() {
@@ -29,6 +29,6 @@ public class Token implements IToken {
 	
 	@Override
 	public String toString() {
-		return String.format("%s[%s](%d,%d)", name, type.toString(), pos.getRow(), pos.getColumn());
+		return String.format("%s[%s](%d,%d)", name, type.toString(), pos.getLine(), pos.getColumn());
 	}
 }

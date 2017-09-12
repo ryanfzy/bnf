@@ -4,16 +4,17 @@ import com.ryanf.bnf.types.AstNodeType;
 import com.ryanf.bnf.types.QuantifierType;
 
 public interface IAstNode {
-	 void addChild(IAstNode node);
 	 IAstNode getChild(int index);
 	 int getChildrenCount();
 	 AstNodeType getType();
 	 QuantifierType getQuantifier();
-	 void setQuantifier(QuantifierType type);
 	 String getName();
+	 Iterable<IAstNode> getChildren();
+	 boolean contains(IAstNode node);
+	 IAstNode clone();
+	 
 	 void setName(String name);
 	 void setChild(int pos, IAstNode child);
-	 boolean contains(IAstNode node);
-	 Iterable<IAstNode> getChildren();
-	 IAstNode clone();
+	 void setQuantifier(QuantifierType type);
+	 void addChild(IAstNode node);
 }

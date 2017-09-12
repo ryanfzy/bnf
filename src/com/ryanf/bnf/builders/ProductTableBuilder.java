@@ -11,12 +11,13 @@ public class ProductTableBuilder {
 	public static Vector<String> createProductTable(IAstTree tree, IParseTable table) {
 		Vector<String> products = new Vector<String>();
 		IAstNode statListNode = tree.getStatListNode();
-		for (int i = 0; i < statListNode.getChildrenCount(); i++) {
-			IAstNode rhs = statListNode.getChild(i).getChild(1);
+		
+		for (IAstNode statNode : statListNode.getChildren()) {
+			IAstNode rhs = statNode.getChild(1);
 			StringBuilder product = new StringBuilder();
 			if (rhs.getType() == AstNodeType.NODELIST) {
-				for (int j = 0; j < rhs.getChildrenCount(); j++)
-					product.append(getProduct(table, rhs.getChild(j)));
+				for (IAstNode child : rhs.getChildren())
+					product.append(getProduct(table, child));
 			}
 			else
 				product.append(getProduct(table, rhs));

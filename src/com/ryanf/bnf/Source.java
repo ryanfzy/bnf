@@ -13,29 +13,29 @@ public class Source implements ISource {
 	Path filePath;
 	List<String> fileLines;
 	int column;
-	int row;
+	int line;
 	
 	public Source(String fileName) {
 		filePath = Paths.get(fileName);
 	}
 
 	public char getChar() {
-		return getChar(row, column);
+		return getChar(line, column);
 	}
 	
 	public int getColumn() {
 		return column;
 	}
 	
-	public int getRow() {
-		return row;
+	public int getLine() {
+		return line;
 	}
 	
 	public void next() throws OutOfCharException {
-		if (hasMoreCol())
-			nextCol();
-		else if (hasMoreRow())
-			nextRow();
+		if (hasMoreColumn())
+			nextColumn();
+		else if (hasMoreLine())
+			nextLine();
 		else
 			throw new OutOfCharException();
 	}
@@ -44,31 +44,31 @@ public class Source implements ISource {
 		throw new UnsupportedOperationException();
 	}
 	
-	public char lookAhead(int pos) throws OutOfCharException {
-		int curCol = column + pos;
-		int curRow = row;
-		while (curCol > fileLines.get(curRow).length() - 1) {
-			if (curRow >= fileLines.size())
+	public char peek(int pos) throws OutOfCharException {
+		int curColumn = column + pos;
+		int curLine = line;
+		while (curColumn > fileLines.get(curLine).length() - 1) {
+			if (curLine >= fileLines.size())
 				throw new OutOfCharException();
-			curCol = fileLines.get(curRow).length() - curCol;
-			curRow++;
+			curColumn = fileLines.get(curLine).length() - curColumn;
+			curLine++;
 		}
-		return getChar(curRow, curCol);
+		return getChar(curLine, curColumn);
 	}
 	
 	public boolean hasMore() {
 		if (canReadFile())
-			return hasMoreCol() || hasMoreRow();
+			return hasMoreColumn() || hasMoreLine();
 		return false;
 	}
 	
 	private void init() {
-		row = 0;
+		line = 0;
 		column = -1;
 	}
 	
-	private  char getChar(int row, int column) {
-		return fileLines.get(row).charAt(column);
+	private  char getChar(int line, int column) {
+		return fileLines.get(line).charAt(column);
 	}
 	
 	private void readFile() throws IOException {
@@ -93,22 +93,22 @@ public class Source implements ISource {
 		return true;
 	}
 	
-	private boolean hasMoreCol() {
-		return column < fileLines.get(row).length() - 1;
+	private boolean hasMoreColumn() {
+		return column < fileLines.get(line).length() - 1;
 	}
 	
-	private boolean hasMoreRow() {
-		return row < fileLines.size() - 1;
+	private boolean hasMoreLine() {
+		return line < fileLines.size() - 1;
 	}
 	
-	private void nextCol() {
+	private void nextColumn() {
 		column++;
 	}
 	
-	private void nextRow() {
-		row++;
+	private void nextLine() {
+		line++;
 		column = 0;
-		while (!hasMoreCol())
-			nextRow();
+		while (!hasMoreColumn())
+			nextLine();
 	}
 }

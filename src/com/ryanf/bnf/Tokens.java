@@ -3,11 +3,9 @@ package com.ryanf.bnf;
 import java.util.Vector;
 
 import com.ryanf.bnf.builders.TokenBuilder;
-import com.ryanf.bnf.exceptions.OutOfCharException;
 import com.ryanf.bnf.interfaces.ISource;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
-import com.ryanf.bnf.types.TokenContext;
 
 public class Tokens implements ITokens {
 	ISource source;
@@ -38,7 +36,7 @@ public class Tokens implements ITokens {
 		return pos;
 	}
 	
-	public void setPos(int pos) {
+	public void seek(int pos) {
 		this.pos = pos;
 	}
 	
@@ -46,37 +44,30 @@ public class Tokens implements ITokens {
 		return source.hasMore();
 	}
 	
-	public IToken lookAhead(int pos) {
+	public IToken peek(int pos) {
 		int originalPos = getPos();
 		for (int i = pos; i > 0; i--)
 			next();
 		IToken token = getToken();
-		setPos(originalPos);
+		seek(originalPos);
 		return token;
 	}
 	
 	private IToken getNext() {
-		int tokenCol = -1;
-		int tokenRow = -1;;
+		int tokenCol = source.getColumn() + 2;
+		int tokenLine = source.getLine() + 2;;
 		while (source.hasMore()) {
+			char nextChar = Character.MIN_VALUE;
 			try {
 				source.next();
-				if (tokenCol == -1 && tokenRow == -1) {
-					tokenCol = source.getColumn() + 1;
-					tokenRow = source.getRow() + 1;
-				}
-				char nextChar = Character.MIN_VALUE;
-				try {
-					nextChar = source.lookAhead(1);
-				}
-				catch (Exception e) {
-				}
-				if (tokenBuilder.feed(source.getChar(), nextChar))
-					break;
-			} catch (Exception e) {
+				nextChar = source.peek(1);
+			} 
+			catch (Exception e) {
 			}
+			if (tokenBuilder.feed(source.getChar(), nextChar))
+				break;
 		}
-		return tokenBuilder.createToken(tokenCol, tokenRow);
+		return tokenBuilder.createToken(tokenCol, tokenLine);
 	}
 	
 	private void init() {

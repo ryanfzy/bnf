@@ -2,18 +2,18 @@ package com.ryanf.bnf.types;
 
 public class TokenPos {
 	int column;
-	int row;
+	int line;
 	
-	public TokenPos(int column, int row) {
+	public TokenPos(int column, int line) {
 		this.column = column;
-		this.row = row;
+		this.line = line;
 	}
 	
 	public int getColumn() {
 		return column;
 	}
 	
-	public int getRow() {
-		return row;
+	public int getLine() {
+		return line;
 	}
 }

@@ -8,6 +8,7 @@ import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
+import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
 import com.ryanf.bnf.tree.AstTree;
 import com.ryanf.bnf.types.QuantifierType;
@@ -51,7 +52,7 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		addAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken().getName()));
+		addAstNode(ParseTreeBuilder.createIdentNode(getTokenName()));
 		match(TokenType.IDENTIFIER);
 	}
 	
@@ -100,11 +101,11 @@ public class Parser {
 	
 	private void matchRhsElem() throws ParserException {
 		if (getTokenType() == TokenType.NUMBER) {
-			pushAstNode(ParseTreeBuilder.createNumberNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createNumberNode(getToken()));
 			match(TokenType.NUMBER);
 		}
 		else if (getTokenType() == TokenType.STRING) {
-			pushAstNode(ParseTreeBuilder.createStrNode(tokens.getToken()));
+			pushAstNode(ParseTreeBuilder.createStrNode(getToken()));
 			match(TokenType.STRING);
 		}
 		else if (getTokenType() == TokenType.LEFTBRACE) {
@@ -124,7 +125,7 @@ public class Parser {
 				matchQuantifier();
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			pushAstNode(ParseTreeBuilder.createIdentNode(tokens.getToken().getName()));
+			pushAstNode(ParseTreeBuilder.createIdentNode(getTokenName()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();
@@ -150,11 +151,11 @@ public class Parser {
 	
 	private void matchCharList() throws ParserException {
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE) {
-			IAstNode node = ParseTreeBuilder.createCharNode(tokens.getToken());
+			IAstNode node = ParseTreeBuilder.createCharNode(getToken());
 			match(getTokenType());
 			if (getTokenType() == TokenType.HBAR) {
 				match(TokenType.HBAR);
-				addAstNode(ParseTreeBuilder.createCharRangeNode(node, ParseTreeBuilder.createCharNode(tokens.getToken())));
+				addAstNode(ParseTreeBuilder.createCharRangeNode(node, ParseTreeBuilder.createCharNode(getToken())));
 				match(getTokenType());
 			}
 			else {
@@ -169,7 +170,7 @@ public class Parser {
 		if (getTokenType() == type)
 			consume();
 		else
-			throw new TokenTypeNotMatchException(tokens.getToken(), type, getTokenType());
+			throw new TokenTypeNotMatchException(getToken(), type, getTokenType());
 	}
 	
 	private void consume() {
@@ -189,7 +190,7 @@ public class Parser {
 	}
 	
 	private TokenType lookAheadType(int pos) {
-		return tokens.lookAhead(pos).getType();
+		return tokens.peek(pos).getType();
 	}
 	
 	private void pushAstNode(IAstNode node) {
@@ -210,5 +211,13 @@ public class Parser {
 	
 	private void setAstNodeQuantifier(QuantifierType type) {
 		getAstNode().setQuantifier(type);
+	}
+	
+	private String getTokenName() {
+		return getToken().getName();
+	}
+	
+	private IToken getToken() {
+		return tokens.getToken();
 	}
 }
