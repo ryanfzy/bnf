@@ -14,6 +14,7 @@ import com.ryanf.bnf.helpers.AstTreeNormaliser;
 import com.ryanf.bnf.helpers.ParseTableHelper;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
+import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
 
 public class Test {
@@ -24,10 +25,11 @@ public class Test {
 	
 		//System.out.println("Start");
 		Parser parser = ParserBuilder.createParser(filePath);
-		IAstTree tree = null;
+		//IAstTree tree = null;
+		INormalisedAstTree normalisedTree = null;
 		try {
-			tree = parser.parse();
-			AstTreeNormaliser.normalise(tree);
+			normalisedTree = ParseTreeBuilder.createNormalisedAstTree(parser.parse());
+			//AstTreeNormaliser.normalise(tree);
 			//System.out.println(tree.getRoot().toString());
 		} catch (ParserException e) {
 			e.printStackTrace();
@@ -36,17 +38,16 @@ public class Test {
 		//System.out.println("End");
 		
 		System.out.println("first:");
-		if (tree != null) {
-			IAstNode root = tree.getRoot();
+		if (normalisedTree != null) {
+			IAstNode root = normalisedTree.getStatListNode();
 			for (int i = 0; i < root.getChildrenCount(); i++) {
 				System.out.println("("+i+")"+root.getChild(i).toString());
 				try {
 					System.out.print(" => ");
-					//System.out.println(AstNodeHelper.getFirsts(tree, root.getChild(i)).toString());
-					System.out.println(tree.getAllFirsts(root.getChild(i)).toString());
+					System.out.println(normalisedTree.getAllFirsts(root.getChild(i)).toString());
 					if (root.getChild(i).getChild(1).contains(ParseTreeBuilder.createEmptyNode())) {
 						System.out.print(" => ");
-						System.out.println(tree.getFollows(root.getChild(i)));
+						System.out.println(normalisedTree.getFollows(root.getChild(i)));
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -60,9 +61,9 @@ public class Test {
 		//System.out.println("row names:");
 		IParseTable table = null;
 		try {
-			table = ParseTableBuilder.createParseTable(tree);
-			Vector<String> products = ProductTableBuilder.createProductTable(tree, table);
-			ParseTableHelper.setTableEntries(tree, table);
+			table = ParseTableBuilder.createParseTable(normalisedTree);
+			Vector<String> products = ProductTableBuilder.createProductTable(normalisedTree, table);
+			ParseTableHelper.setTableEntries(normalisedTree, table);
 			for (String product : products)
 				System.out.println(product);
 			Files.write(Paths.get(tableHtml), ParseTableHelper.toHtml(table).getBytes());

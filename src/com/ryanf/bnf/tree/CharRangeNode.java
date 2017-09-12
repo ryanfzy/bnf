@@ -10,6 +10,10 @@ public class CharRangeNode extends AstNode {
 		addChild(from);
 		addChild(to);
 	}
+	
+	private CharRangeNode(CharRangeNode other) {
+		super(other);
+	}
 
 	@Override
 	public AstNodeType getType() {
@@ -24,5 +28,10 @@ public class CharRangeNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		return equals(node);
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new CharRangeNode(this);
 	}
 }

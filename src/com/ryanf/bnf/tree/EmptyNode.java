@@ -23,4 +23,9 @@ public class EmptyNode extends AstNode {
 	public boolean contains(IAstNode node) {
 		return node.getType() == AstNodeType.EMPTY;
 	}
+
+	@Override
+	public IAstNode clone() {
+		return this;
+	}
 }

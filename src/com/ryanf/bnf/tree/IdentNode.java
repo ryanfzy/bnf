@@ -12,8 +12,9 @@ public class IdentNode extends AstNode {
 		this.name = name;
 	}
 	
-	public IdentNode(IdentNode node) {
-		this(node.name);
+	private IdentNode(IdentNode node) {
+		super(node);
+		this.name = node.name;
 	}
 	
 	@Override
@@ -44,5 +45,10 @@ public class IdentNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		return equals(node);
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new IdentNode(this);
 	}
 }

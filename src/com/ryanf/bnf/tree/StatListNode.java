@@ -4,7 +4,14 @@ import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class StatListNode extends AstNode {
-
+	public StatListNode() {
+		super();
+	}
+	
+	private StatListNode(StatListNode other) {
+		super(other);
+	}
+	
 	@Override
 	public AstNodeType getType() {
 		return AstNodeType.STATLIST;
@@ -22,5 +29,10 @@ public class StatListNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new StatListNode(this);
 	}
 }

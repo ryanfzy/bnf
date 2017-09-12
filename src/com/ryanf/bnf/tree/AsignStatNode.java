@@ -9,6 +9,10 @@ public class AsignStatNode extends AstNode {
 		super();
 	}
 	
+	private AsignStatNode(AsignStatNode other) {
+		super(other);
+	}
+	
 	public AsignStatNode(IAstNode lhs, IAstNode rhs) {
 		super();
 		addChild(lhs);
@@ -36,5 +40,10 @@ public class AsignStatNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		return getRhs().contains(node);
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new AsignStatNode(this);
 	}
 }

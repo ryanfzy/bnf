@@ -7,6 +7,10 @@ public class CharListNode extends AstNode {
 	public CharListNode() {
 		super();
 	}
+	
+	private CharListNode(CharListNode other) {
+		super(other);
+	}
 
 	@Override
 	public AstNodeType getType() {
@@ -30,5 +34,10 @@ public class CharListNode extends AstNode {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new CharListNode(this);
 	}
 }

@@ -1,7 +1,9 @@
 package com.ryanf.bnf.builders;
 
+import com.ryanf.bnf.helpers.AstTreeNormaliser;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
+import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.tree.AlterListNode;
 import com.ryanf.bnf.tree.AsignStatNode;
@@ -12,6 +14,7 @@ import com.ryanf.bnf.tree.CharRangeNode;
 import com.ryanf.bnf.tree.EmptyNode;
 import com.ryanf.bnf.tree.IdentNode;
 import com.ryanf.bnf.tree.ListNode;
+import com.ryanf.bnf.tree.NormalisedAstTree;
 import com.ryanf.bnf.tree.NumberNode;
 import com.ryanf.bnf.tree.StatListNode;
 import com.ryanf.bnf.tree.StrNode;
@@ -39,7 +42,7 @@ public class ParseTreeBuilder {
 	
 	public static IAstNode createIdentNode(IAstNode identNode) {
 		if (identNode.getType() == AstNodeType.IDENT)
-			return new IdentNode((IdentNode)identNode);
+			return identNode.clone();
 		return null;
 	}
 	
@@ -48,11 +51,11 @@ public class ParseTreeBuilder {
 	}
 	
 	public static IAstNode createNumberNode(IToken token) {
-		return new NumberNode(token);
+		return new NumberNode(token.getName());
 	}
 	
 	public static IAstNode createStrNode(IToken token) {
-		return new StrNode(token);
+		return new StrNode(token.getName());
 	}
 
 	public static IAstNode createCharListNode() {
@@ -60,7 +63,7 @@ public class ParseTreeBuilder {
 	}
 
 	public static IAstNode createCharNode(IToken token) {
-		return new CharNode(token);
+		return new CharNode(token.getName());
 	}
 
 	public static IAstNode createAlterListNode() {
@@ -87,5 +90,11 @@ public class ParseTreeBuilder {
 		if (emptyNode == null)
 			emptyNode = new EmptyNode();
 		return emptyNode;
+	}
+	
+	public static INormalisedAstTree createNormalisedAstTree(IAstTree tree) {
+		INormalisedAstTree normalisedTree = new NormalisedAstTree(tree.getStatListNode().clone());
+		AstTreeNormaliser.normalise(normalisedTree);
+		return normalisedTree;
 	}
 }

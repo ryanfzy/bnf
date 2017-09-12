@@ -14,6 +14,10 @@ public class SubStatNode extends AstNode {
 		addChild(right);
 	}
 	
+	private SubStatNode(SubStatNode other) {
+		super(other);
+	}
+	
 	public IAstNode left() {
 		return getChild(0);
 	}
@@ -35,5 +39,10 @@ public class SubStatNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		return equals(node);
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new SubStatNode(this);
 	}
 }

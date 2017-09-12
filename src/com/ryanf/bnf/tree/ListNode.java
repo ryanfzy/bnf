@@ -7,6 +7,10 @@ public class ListNode extends AstNode {
 	public ListNode() {
 		super();
 	}
+	
+	private ListNode(ListNode other) {
+		super(other);
+	}
 
 	@Override
 	public AstNodeType getType() {
@@ -39,5 +43,10 @@ public class ListNode extends AstNode {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new ListNode(this);
 	}
 }

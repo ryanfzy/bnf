@@ -17,7 +17,7 @@ public class AstTreeNormaliser {
 	
 	private AstTreeNormaliser(IAstTree tree) {
 		this.tree = tree;
-		statListNode = tree.getRoot();
+		statListNode = tree.getStatListNode();
 		init();
 	}
 	
@@ -112,7 +112,6 @@ public class AstTreeNormaliser {
     }
 	
 	private IAstNode normalise(IAstNode node) {
-		//System.out.println(node.toString());
 		if (node.getQuantifier() == QuantifierType.ZERO_OR_MORE) {
 			return createZeroOrMoreNode(node);
 		}

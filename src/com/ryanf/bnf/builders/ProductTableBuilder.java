@@ -10,7 +10,7 @@ import com.ryanf.bnf.types.AstNodeType;
 public class ProductTableBuilder {
 	public static Vector<String> createProductTable(IAstTree tree, IParseTable table) {
 		Vector<String> products = new Vector<String>();
-		IAstNode statListNode = tree.getRoot();
+		IAstNode statListNode = tree.getStatListNode();
 		for (int i = 0; i < statListNode.getChildrenCount(); i++) {
 			IAstNode rhs = statListNode.getChild(i).getChild(1);
 			StringBuilder product = new StringBuilder();

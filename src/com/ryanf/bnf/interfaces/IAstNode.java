@@ -14,4 +14,6 @@ public interface IAstNode {
 	 void setName(String name);
 	 void setChild(int pos, IAstNode child);
 	 boolean contains(IAstNode node);
+	 Iterable<IAstNode> getChildren();
+	 IAstNode clone();
 }

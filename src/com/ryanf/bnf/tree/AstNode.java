@@ -18,8 +18,20 @@ public abstract class AstNode implements IAstNode {
 		quantifier = QuantifierType.ONE;
 	}
 	
+	protected AstNode(AstNode other) {
+		this();
+		init (other);
+	}
+	
 	private void init() {
 		children = new Vector<IAstNode>();
+	}
+	
+	private void init(AstNode other) {
+		for (IAstNode child : other.children)
+			addChild(child.clone());
+		this.type = other.type;
+		this.quantifier = other.quantifier;
 	}
 	
 	public void addChild(IAstNode node) {
@@ -28,6 +40,10 @@ public abstract class AstNode implements IAstNode {
 	
 	public int getChildrenCount() {
 		return children.size();
+	}
+	
+	public Iterable<IAstNode> getChildren() {
+		return children;
 	}
 	
 	public IAstNode getChild(int index) {
@@ -43,6 +59,7 @@ public abstract class AstNode implements IAstNode {
 	
 	public abstract AstNodeType getType();
 	public abstract boolean contains(IAstNode node);
+	public abstract IAstNode clone();
 	
 	public String getName() {
 		return "";

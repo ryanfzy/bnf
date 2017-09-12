@@ -8,6 +8,10 @@ public class AlterListNode extends AstNode {
 		super();
 	}
 	
+	private AlterListNode(AlterListNode other) {
+		super(other);
+	}
+	
 	@Override
 	public AstNodeType getType() {
 		return AstNodeType.ALTERNODELIST;
@@ -39,5 +43,10 @@ public class AlterListNode extends AstNode {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new AlterListNode(this);
 	}
 }

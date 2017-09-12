@@ -5,10 +5,15 @@ import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class StrNode extends AstNode {
-	IToken token;
+	String token;
 	
-	public StrNode(IToken token) {
+	public StrNode(String token) {
 		this.token = token;
+	}
+	
+	private StrNode(StrNode other) {
+		super(other);
+		this.token = other.token;
 	}
 	
 	@Override
@@ -18,7 +23,7 @@ public class StrNode extends AstNode {
 
 	@Override
 	public String toString() {
-		return token.getName();
+		return token;
 	}
 	
 	@Override
@@ -29,5 +34,10 @@ public class StrNode extends AstNode {
 	@Override
 	public boolean contains(IAstNode node) {
 		return equals(node);
+	}
+
+	@Override
+	public IAstNode clone() {
+		return new StrNode(this);
 	}
 }

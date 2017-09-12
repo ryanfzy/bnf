@@ -6,6 +6,7 @@ import com.ryanf.bnf.ParseTable;
 import com.ryanf.bnf.helpers.AstNodeHelper;
 import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IAstTree;
+import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
 import com.ryanf.bnf.types.AstNodeType;
 
@@ -37,30 +38,13 @@ public class ParseTableBuilder {
 			addedCols.add(colName);
 		}
 	}
-	/*
-	private void setEntries(IAstTree tree, String rowName, IAstNode firstNode) throws Exception {
-		if (firstNode.getType() == AstNodeType.NODELIST)
-			setEntries(tree, rowName, firstNode.getChild(0));
-		else if (firstNode.getType() == AstNodeType.ALTERNODELIST) {
-			for (int j = 0 ; j < firstNode.getChildrenCount(); j++)
-				setEntries(tree, rowName, firstNode.getChild(j));
-		}
-		else {
-			for (String first : AstNodeHelper.getFirsts(tree, firstNode)) {
-				addColumn(first);
-				if (firstNode.getType() == AstNodeType.IDENT)
-					table.setEntry(rowName, first, firstNode.toString());
-				else
-					table.setEntry(rowName, first, first);
-			}
-		}
-	}*/
 	
 	public static IParseTable createParseTable(IAstTree tree) throws Exception {
-		if (tree.getRoot().getType() == AstNodeType.STATLIST) {
+		if (tree.getStatListNode().getType() == AstNodeType.STATLIST) {
 			
+			INormalisedAstTree normalisedTree = ParseTreeBuilder.createNormalisedAstTree(tree);
 			ParseTableBuilder builder = new ParseTableBuilder();		
-			IAstNode statListNode = tree.getRoot();
+			IAstNode statListNode = tree.getStatListNode();
 		
 			// add rows
 			int childrenCount = statListNode.getChildrenCount();
@@ -74,16 +58,9 @@ public class ParseTableBuilder {
 				IAstNode firstNode = statListNode.getChild(i).getChild(1);
 				if (firstNode.getType() == AstNodeType.NODELIST)
 					firstNode = firstNode.getChild(0);
-				for (String first : tree.getAllFirsts(firstNode))
+				for (String first : normalisedTree.getAllFirsts(firstNode))
 					builder.addColumn(first);
 			}
-			
-			/*
-			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
-				IAstNode lhs = statListNode.getChild(i).getChild(0);
-				IAstNode rhs = statListNode.getChild(i).getChild(1);
-				builder.setEntries(tree, lhs.getName(), rhs);
-			}*/
 			
 			return builder.table;
 		}
