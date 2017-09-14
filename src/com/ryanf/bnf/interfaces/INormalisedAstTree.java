@@ -3,7 +3,6 @@ package com.ryanf.bnf.interfaces;
 import java.util.Vector;
 
 public interface INormalisedAstTree extends IAstTree {
-	Vector<String> getAllFirsts(IAstNode node) throws Exception;
 	Vector<String> getFirsts(IAstNode node) throws Exception;
 	Vector<String> getFollows(IAstNode node) throws Exception;
 	

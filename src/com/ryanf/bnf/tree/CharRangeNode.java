@@ -14,6 +14,14 @@ public class CharRangeNode extends AstNode {
 	private CharRangeNode(CharRangeNode other) {
 		super(other);
 	}
+	
+	public IAstNode getFrom() {
+		return getChild(0);
+	}
+	
+	public IAstNode getTo() {
+		return getChild(1);
+	}
 
 	@Override
 	public AstNodeType getType() {
@@ -22,7 +30,7 @@ public class CharRangeNode extends AstNode {
 	
 	@Override
 	public String toString() {
-		return String.format("%s-%s", getChild(0).toString(), getChild(1).toString());
+		return String.format("%s-%s", getFrom().toString(), getTo().toString());
 	}
 
 	@Override

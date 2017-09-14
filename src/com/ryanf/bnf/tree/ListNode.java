@@ -20,13 +20,13 @@ public class ListNode extends AstNode {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < getChildrenCount(); i++) {
+		for (IAstNode child : getChildren()) {
 			if (builder.length() == 0) {
 				builder.append("(");
-				builder.append(getChild(i).toString());
+				builder.append(child.toString());
 			}
 			else
-				builder.append(String.format(",%s", getChild(i).toString()));
+				builder.append(String.format(",%s", child.toString()));
 		}
 		builder.append(")");
 		return builder.toString() + getQuantifierInStr();
@@ -34,12 +34,12 @@ public class ListNode extends AstNode {
 
 	@Override
 	public boolean contains(IAstNode node) {
-		for (int i = 0; i < getChildrenCount(); i++) {
-			if (getChild(i).equals(node))
+		for (IAstNode child : getChildren()) {
+			if (child.equals(node))
 				return true;
 		}
-		for (int i = 0; i < getChildrenCount(); i++) {
-			if (getChild(i).contains(node))
+		for (IAstNode child : getChildren()) {
+			if (child.contains(node))
 				return true;
 		}
 		return false;

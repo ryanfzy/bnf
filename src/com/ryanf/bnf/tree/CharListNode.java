@@ -21,16 +21,16 @@ public class CharListNode extends AstNode {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
-		for (int i = 0; i < getChildrenCount(); i++)
-			builder.append(getChild(i).toString());
+		for (IAstNode child : getChildren())
+			builder.append(child.toString());
 		builder.append("]");
 		return builder.toString() + getQuantifierInStr();
 	}
 
 	@Override
 	public boolean contains(IAstNode node) {
-		for (int i = 0; i < getChildrenCount(); i++) {
-			if (getChild(i).equals(node))
+		for (IAstNode child : getChildren()) {
+			if (child.equals(node))
 				return true;
 		}
 		return false;

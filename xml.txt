@@ -2,7 +2,7 @@ document = prolog, element, misc*;
 
 prolog = xml-decl, misc*, (doctype-decl, misc*)?;
 xml-decl = '<?xml', version_info, encoding-decl?, sd-decl?, S?, '?>';
-version-info = S, 'version', eq, ("'", version-num, "'" | '"', version-num, '"');
+version-info = S, 'version', eq, (("'", version-num, "'") | ('"', version-num, '"'));
 eq = S?, '=', S?;
 version-num = '1.', [0-9]+;
 misc = comment | pi | S;
@@ -54,7 +54,7 @@ name-char = name-start-char
           | [#x0300-#x036F]
           | [#x203F-#x2040];
 name = name-start-char, (name-char)*;
-names = name, (#x20, name)*;
+node = name, (#x20, name)*;
 nmtoken = (name-char)+;
 nmtokens = nmtoken, (#x20, nmtoken)*;
 
@@ -155,7 +155,7 @@ text-decl = '<?xml', version-info?, encoding-decl, S?, '?>';
 
 ext-parsed-ent = text-decl?, content;
 
-encoding-decl = S, 'encoding', eq, ('"', enc-name, '"' | "'", enc-name, "'");
+encoding-decl = S, 'encoding', eq, (('"', enc-name, '"') | ("'", enc-name, "'"));
 enc-name = [A-Za-z], ([A-Za-z0-9._] | '-')*;
 
 notation-decl = '<!NOTATION', S, name, S, (external-id | public-id), S?, '>';

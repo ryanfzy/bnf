@@ -52,34 +52,24 @@ public class ParseTableHelper {
 		return str.replace("<", "&lt;").replace(">", "&gt;");
 	}
 	
-	public static void setTableEntries(INormalisedAstTree tree, IParseTable table) {
+	public static void setTableEntries(INormalisedAstTree tree, IParseTable table) throws Exception {
 		if (tree != null && table != null) {
 			
 			// set firsts
 			IAstNode statListNode = tree.getStatListNode();
-			for (int i = 0; i < statListNode.getChildrenCount(); i++) {
-				IAstNode lhs = statListNode.getChild(i).getChild(0);
-				IAstNode rhs = statListNode.getChild(i).getChild(1);
-				Vector<IAstNode> nodes = null;
-				int productId = 0;
-				if (rhs.getType() == AstNodeType.NODELIST) {
-					nodes = tree.getStatNodes(rhs.getChild(0).getName());
-					productId = table.getProductId(rhs.getChild(0).getName());
-				}
-				else {
-					nodes = tree.getStatNodes(rhs.getName());
-					productId = table.getProductId(rhs.getName());
-				}
+			for (IAstNode statNode : statListNode.getChildren()) {
+				IAstNode lhs = statNode.getChild(0);
+				IAstNode rhs = statNode.getChild(1);
+				
+				String firstNodeName = rhs.getName();
+				if (rhs.getType() == AstNodeType.NODELIST)
+					firstNodeName = rhs.getChild(0).getName();
+				Vector<IAstNode> nodes = tree.getStatNodes(firstNodeName);
+				int productId = table.getProductId(firstNodeName);
 
-				for (int j = 0; j < nodes.size(); j++) {
-					try {
-						for (String first : tree.getFirsts(nodes.get(j).getChild(1))) {
-							table.setEntry(lhs.getName(), first, productId);
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				for (IAstNode node : nodes) {
+					for (String first : tree.getFirsts(node.getChild(1)))
+						table.setEntry(lhs.getName(), first, productId);
 				}
 			}
 			
@@ -89,13 +79,9 @@ public class ParseTableHelper {
 				if (tree.containsEmptyNode(row)) {
 					Vector<IAstNode> nodes = tree.getStatNodes(row);
 					for (int i = 0; i < nodes.size(); i++) {
-						try {
-							for (String follow : tree.getFollows(nodes.get(i).getChild(0)))
-								table.setEntry(row, follow, productId + i);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						for (String follow : tree.getFollows(nodes.get(i).getChild(0)))
+							table.setEntry(row, follow, productId);
+						productId++;
 					}
 				}
 			}

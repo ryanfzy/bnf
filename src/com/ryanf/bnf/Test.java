@@ -9,7 +9,6 @@ import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.builders.ParserBuilder;
 import com.ryanf.bnf.builders.ProductTableBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
-import com.ryanf.bnf.helpers.AstNodeHelper;
 import com.ryanf.bnf.helpers.AstTreeNormaliser;
 import com.ryanf.bnf.helpers.ParseTableHelper;
 import com.ryanf.bnf.interfaces.IAstNode;
@@ -44,7 +43,7 @@ public class Test {
 				System.out.println("("+i+")"+root.getChild(i).toString());
 				try {
 					System.out.print(" => ");
-					System.out.println(normalisedTree.getAllFirsts(root.getChild(i)).toString());
+					System.out.println(normalisedTree.getFirsts(root.getChild(i)).toString());
 					if (root.getChild(i).getChild(1).contains(ParseTreeBuilder.createEmptyNode())) {
 						System.out.print(" => ");
 						System.out.println(normalisedTree.getFollows(root.getChild(i)));

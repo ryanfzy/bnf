@@ -20,9 +20,8 @@ public class StatListNode extends AstNode {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < getChildrenCount(); i++) {
-			builder.append(String.format("%s\n", getChild(i).toString()));
-		}
+		for (IAstNode child : getChildren())
+			builder.append(String.format("%s\n", child.toString()));
 		return builder.toString();
 	}
 
