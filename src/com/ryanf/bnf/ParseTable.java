@@ -80,6 +80,14 @@ public class ParseTable implements IParseTable {
 		return clone;
 	}
 	
+	public int getRowCount() {
+		return rowNames.size();
+	}
+	
+	public int getColumnCount() {
+		return colNames.size();
+	}
+	
 	public boolean hasRow(String name) {
 		return rowNames.contains(name);
 	}

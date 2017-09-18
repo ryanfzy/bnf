@@ -10,6 +10,8 @@ public interface IParseTable {
 	boolean hasColumn(String columnName);
 	int getProductId(String name);
 	int getTokenId(String name);
+	int getRowCount();
+	int getColumnCount();
 	
 	void addRow(String name);
 	void addColumn(String name);
