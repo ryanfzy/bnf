@@ -1,9 +1,9 @@
 package com.ryanf.bnf.builders;
 
 import com.ryanf.bnf.helpers.AstTreeNormaliser;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.tree.AlterListNode;
 import com.ryanf.bnf.tree.AsignStatNode;
@@ -14,13 +14,14 @@ import com.ryanf.bnf.tree.CharRangeNode;
 import com.ryanf.bnf.tree.EmptyNode;
 import com.ryanf.bnf.tree.IdentNode;
 import com.ryanf.bnf.tree.ListNode;
-import com.ryanf.bnf.tree.NormalisedAstTree;
+//import com.ryanf.bnf.tree.NormalisedAstTree;
 import com.ryanf.bnf.tree.NumberNode;
 import com.ryanf.bnf.tree.StatListNode;
 import com.ryanf.bnf.tree.StrNode;
 import com.ryanf.bnf.tree.SubStatNode;
 import com.ryanf.bnf.types.AstNodeType;
 
+/*
 public class ParseTreeBuilder {
 	static IAstNode emptyNode;
 	
@@ -93,8 +94,8 @@ public class ParseTreeBuilder {
 	}
 	
 	public static INormalisedAstTree createNormalisedAstTree(IAstTree tree) {
-		INormalisedAstTree normalisedTree = new NormalisedAstTree(tree.getStatListNode().clone());
+		INormalisedAstTree normalisedTree = new NormalisedAstTree(tree.getRoot().clone());
 		AstTreeNormaliser.normalise(normalisedTree);
 		return normalisedTree;
 	}
-}
+}*/

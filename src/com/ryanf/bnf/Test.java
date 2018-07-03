@@ -5,25 +5,38 @@ import java.nio.file.Paths;
 import java.util.Vector;
 
 import com.ryanf.bnf.builders.ParseTableBuilder;
-import com.ryanf.bnf.builders.ParseTreeBuilder;
+//import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.builders.ParserBuilder;
 import com.ryanf.bnf.builders.ProductTableBuilder;
+import com.ryanf.bnf.converters.CConverter;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.helpers.AstTreeNormaliser;
 import com.ryanf.bnf.helpers.ParseTableHelper;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
 
 public class Test {
 
 	public static void main(String[] args) {
+		/*
 		String filePath = "D:\\eclipse-workspace\\bnf\\xml.txt";
 		String tableHtml = "D:\\eclipse-workspace\\bnf\\table.html";
+		String output = "D:\\eclipse-workspace\\bnf\\output.c";
 	
 		//System.out.println("Start");
 		Parser parser = ParserBuilder.createParser(filePath);
+		
+		try {
+			CConverter converter = new CConverter(parser.parse());
+			Files.write(Paths.get(output), converter.toCode().getBytes());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("done.");*/
+		/*
 		//IAstTree tree = null;
 		INormalisedAstTree normalisedTree = null;
 		try {
@@ -69,6 +82,6 @@ public class Test {
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 	}
 }

@@ -19,6 +19,7 @@ public class Lex {
 	public static char Comma = ',';
 	public static char SemiColon = ';';
 	public static char Plus = '+';
+	public static char Escape = '\\';
 	
 	public static String EmptyNode = "e";
 	
@@ -39,7 +40,9 @@ public class Lex {
 			|| ch == Lex.Hat
 			|| ch == Lex.SemiColon
 			|| ch == Lex.Comma
-			|| ch == Lex.Plus)
+			|| ch == Lex.Plus
+			|| ch == Lex.Quote
+			|| ch == Lex.DoubleQuote)
 			return true;
 		return false;
 	}
@@ -97,6 +100,10 @@ public class Lex {
 			return TokenType.SEMICOLON;
 		else if (tokenName.equals(","))
 			return TokenType.COMMA;
+		else if (tokenName.equals("'"))
+			return TokenType.QUOTE;
+		else if (tokenName.equals("\""))
+			return TokenType.DOUBLEQUOTE;
 		else
 			return TokenType.IDENTIFIER;
 	}

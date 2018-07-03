@@ -3,6 +3,7 @@ package com.ryanf.bnf;
 import java.util.Vector;
 
 import com.ryanf.bnf.builders.TokenBuilder;
+import com.ryanf.bnf.exceptions.OutOfCharException;
 import com.ryanf.bnf.interfaces.ISource;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;

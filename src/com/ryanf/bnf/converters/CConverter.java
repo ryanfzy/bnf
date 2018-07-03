@@ -5,16 +5,17 @@ import java.nio.file.Paths;
 import java.util.Vector;
 
 import com.ryanf.bnf.builders.ParseTableBuilder;
-import com.ryanf.bnf.builders.ParseTreeBuilder;
+//import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.builders.ProductTableBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.helpers.ParseTableHelper;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
 
 public class CConverter {
+	/*
 	StringBuilder strBuilder;
 	IAstTree tree;
 	INormalisedAstTree normalisedTree;
@@ -84,5 +85,5 @@ public class CConverter {
 		if (normalisedTree == null)
 			normalisedTree = ParseTreeBuilder.createNormalisedAstTree(tree);
 		return normalisedTree;
-	}
+	}*/
 }

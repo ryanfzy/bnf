@@ -1,7 +1,7 @@
 package com.ryanf.bnf.tree;
 
 
-import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class AsignStatNode extends AstNode {
@@ -9,21 +9,23 @@ public class AsignStatNode extends AstNode {
 		super();
 	}
 	
+	/*
 	private AsignStatNode(AsignStatNode other) {
 		super(other);
-	}
+	}*/
 	
+	/*
 	public AsignStatNode(IAstNode lhs, IAstNode rhs) {
 		super();
 		addChild(lhs);
 		addChild(rhs);
-	}
+	}*/
 	
-	public IAstNode getLhs() {
+	public /*IAstNode*/AstNode getLhs() {
 		return getChild(0);
 	}
 	
-	public IAstNode getRhs() {
+	public /*IAstNode*/AstNode getRhs() {
 		return getChild(1);
 	}
 
@@ -37,6 +39,7 @@ public class AsignStatNode extends AstNode {
 		return String.format("%s = %s", getLhs().toString(), getRhs().toString());
 	}
 
+	/*
 	@Override
 	public boolean contains(IAstNode node) {
 		return getRhs().contains(node);
@@ -45,5 +48,5 @@ public class AsignStatNode extends AstNode {
 	@Override
 	public IAstNode clone() {
 		return new AsignStatNode(this);
-	}
+	}*/
 }

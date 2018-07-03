@@ -2,13 +2,14 @@ package com.ryanf.bnf.helpers;
 
 import java.util.Vector;
 
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class ParseTableHelper {
+	/*
 	public static String toHtml(IParseTable table) {
 		StringBuilder strBuilder = new StringBuilder();
 		strBuilder.append("<table border=\"1\" style=\"white-space:nowrap;\">");
@@ -56,7 +57,7 @@ public class ParseTableHelper {
 		if (tree != null && table != null) {
 			
 			// set firsts
-			IAstNode statListNode = tree.getStatListNode();
+			IAstNode statListNode = tree.getRoot();
 			for (IAstNode statNode : statListNode.getChildren()) {
 				IAstNode lhs = statNode.getChild(0);
 				IAstNode rhs = statNode.getChild(1);
@@ -86,5 +87,5 @@ public class ParseTableHelper {
 				}
 			}
 		}
-	}
+	}*/
 }

@@ -1,6 +1,6 @@
 package com.ryanf.bnf.tree;
 
-import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.types.AstNodeType;
 
@@ -12,10 +12,11 @@ public class IdentNode extends AstNode {
 		this.name = name;
 	}
 	
+	/*
 	private IdentNode(IdentNode node) {
 		super(node);
 		this.name = node.name;
-	}
+	}*/
 	
 	@Override
 	public String getName() {
@@ -37,6 +38,7 @@ public class IdentNode extends AstNode {
 		return name + getQuantifierInStr();
 	}
 	
+	/*
 	@Override
 	public void addChild(IAstNode child) {
 		throw new UnsupportedOperationException(name);
@@ -50,5 +52,5 @@ public class IdentNode extends AstNode {
 	@Override
 	public IAstNode clone() {
 		return new IdentNode(this);
-	}
+	}*/
 }

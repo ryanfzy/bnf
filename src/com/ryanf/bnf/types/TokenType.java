@@ -21,4 +21,5 @@ public enum TokenType {
 	STRING,
 	PLUS,
 	NUMBER, 
+	ESACPE,
 }

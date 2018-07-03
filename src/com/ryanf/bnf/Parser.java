@@ -2,33 +2,50 @@ package com.ryanf.bnf;
 
 import java.util.Stack;
 
-import com.ryanf.bnf.builders.ParseTreeBuilder;
+//import com.ryanf.bnf.builders.ParseTreeBuilder;
 import com.ryanf.bnf.exceptions.ParserException;
 import com.ryanf.bnf.exceptions.QuantifierNotMatchException;
 import com.ryanf.bnf.exceptions.TokenTypeNotMatchException;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+import com.ryanf.bnf.interfaces.IParser;
 import com.ryanf.bnf.interfaces.IToken;
 import com.ryanf.bnf.interfaces.ITokens;
+import com.ryanf.bnf.tree.AlterListNode;
+import com.ryanf.bnf.tree.AsignStatNode;
+import com.ryanf.bnf.tree.AstNode;
 import com.ryanf.bnf.tree.AstTree;
+import com.ryanf.bnf.tree.CharListNode;
+import com.ryanf.bnf.tree.CharNode;
+import com.ryanf.bnf.tree.CharRangeNode;
+import com.ryanf.bnf.tree.IdentNode;
+import com.ryanf.bnf.tree.ListNode;
+import com.ryanf.bnf.tree.NumberNode;
+import com.ryanf.bnf.tree.StatListNode;
+import com.ryanf.bnf.tree.StrNode;
+import com.ryanf.bnf.tree.SubStatNode;
 import com.ryanf.bnf.types.QuantifierType;
 import com.ryanf.bnf.types.TokenType;
 
-public class Parser {
+public class Parser implements IParser {
 	ITokens tokens;
-	IAstNode statListNode;
-	Stack<IAstNode> astNodes;
+	//IAstNode statListNode;
+	AstNode statListNode;
+	//Stack<IAstNode> astNodes;
+	Stack<AstNode> astNodes;
 	
 	public Parser(ITokens tokens) {
 		this.tokens = tokens;
 	}
 	
 	private void init() {
-		astNodes = new Stack<IAstNode>();
-		statListNode = ParseTreeBuilder.createStatListNode();
+		//astNodes = new Stack<IAstNode>();
+		//statListNode = ParseTreeBuilder.createStatListNode();
+		astNodes = new Stack<AstNode>(); 
+		statListNode = new StatListNode();
 	}
 	
-	public IAstTree parse() throws ParserException {
+	public /*IAstTree*/AstTree parse() throws ParserException {
 		init();
 		tokens.next();
 		while (tokens.hasMore()) {
@@ -40,7 +57,7 @@ public class Parser {
 	
 	private void parseRule() throws ParserException {
 		if (lookAheadType(1) == TokenType.ASSIGN) {
-			pushAstNode(ParseTreeBuilder.createAsignStatNode());
+			pushAstNode(/*ParseTreeBuilder.createAsignStatNode()*/new AsignStatNode());
 			matchLhs();
 			match(TokenType.ASSIGN);
 			matchRhs();
@@ -52,7 +69,7 @@ public class Parser {
 	}
 	
 	private void matchLhs() throws ParserException {
-		addAstNode(ParseTreeBuilder.createIdentNode(getTokenName()));
+		addAstNode(/*ParseTreeBuilder.createIdentNode(getTokenName())*/new IdentNode(getTokenName()));
 		match(TokenType.IDENTIFIER);
 	}
 	
@@ -79,20 +96,20 @@ public class Parser {
 		else {
 			matchRhsElem();
 			if (getTokenType() == TokenType.COMMA) {
-				IAstNode node = popAstNode();
-				pushAstNode(ParseTreeBuilder.createListNode());
+				/*IAstNode*/AstNode node = popAstNode();
+				pushAstNode(/*ParseTreeBuilder.createListNode()*/new ListNode());
 				addAstNode(node);
 				matchRhs();
 			}
 			else if (getTokenType() == TokenType.VBAR) {
-				IAstNode node = popAstNode();
-				pushAstNode(ParseTreeBuilder.createAlterListNode());
+				/*IAstNode*/AstNode node = popAstNode();
+				pushAstNode(/*ParseTreeBuilder.createAlterListNode()*/new AlterListNode());
 				addAstNode(node);
 				matchRhs();
 			}
 			else if (getTokenType() == TokenType.HBAR) {
-				IAstNode left = popAstNode();
-				pushAstNode(ParseTreeBuilder.createSubStatNode());
+				/*IAstNode*/AstNode left = popAstNode();
+				pushAstNode(/*ParseTreeBuilder.createSubStatNode()*/new SubStatNode());
 				addAstNode(left);
 				matchRhs();
 			}
@@ -101,11 +118,11 @@ public class Parser {
 	
 	private void matchRhsElem() throws ParserException {
 		if (getTokenType() == TokenType.NUMBER) {
-			pushAstNode(ParseTreeBuilder.createNumberNode(getToken()));
+			pushAstNode(/*ParseTreeBuilder.createNumberNode(getToken())*/new NumberNode(getTokenName()));
 			match(TokenType.NUMBER);
 		}
 		else if (getTokenType() == TokenType.STRING) {
-			pushAstNode(ParseTreeBuilder.createStrNode(getToken()));
+			pushAstNode(/*ParseTreeBuilder.createStrNode(getToken())*/new StrNode(getTokenName()));
 			match(TokenType.STRING);
 		}
 		else if (getTokenType() == TokenType.LEFTBRACE) {
@@ -117,7 +134,7 @@ public class Parser {
 			pushAstNode(popAstNode());
 		}
 		else if (getTokenType() == TokenType.LEFTSQUAREBRACE) {
-			pushAstNode(ParseTreeBuilder.createCharListNode());
+			pushAstNode(/*ParseTreeBuilder.createCharListNode()*/new CharListNode());
 			match(TokenType.LEFTSQUAREBRACE);
 			matchCharList();
 			match(TokenType.RIGHTSQUAREBRACE);
@@ -125,7 +142,7 @@ public class Parser {
 				matchQuantifier();
 		}
 		else if (getTokenType() == TokenType.IDENTIFIER) {
-			pushAstNode(ParseTreeBuilder.createIdentNode(getTokenName()));
+			pushAstNode(/*ParseTreeBuilder.createIdentNode(getTokenName())*/new IdentNode(getTokenName()));
 			match(TokenType.IDENTIFIER);
 			if (isQuantifier())
 				matchQuantifier();
@@ -151,11 +168,12 @@ public class Parser {
 	
 	private void matchCharList() throws ParserException {
 		if (getTokenType() != TokenType.RIGHTSQUAREBRACE) {
-			IAstNode node = ParseTreeBuilder.createCharNode(getToken());
+			//IAstNode node = *ParseTreeBuilder.createCharNode(getToken());
+			AstNode node = new CharNode(getTokenName());
 			match(getTokenType());
 			if (getTokenType() == TokenType.HBAR) {
 				match(TokenType.HBAR);
-				addAstNode(ParseTreeBuilder.createCharRangeNode(node, ParseTreeBuilder.createCharNode(getToken())));
+				addAstNode(/*ParseTreeBuilder.createCharRangeNode(node, ParseTreeBuilder.createCharNode(getToken()))*/new CharRangeNode(node, new CharNode(getTokenName())));
 				match(getTokenType());
 			}
 			else {
@@ -193,19 +211,19 @@ public class Parser {
 		return tokens.peek(pos).getType();
 	}
 	
-	private void pushAstNode(IAstNode node) {
+	private void pushAstNode(/*IAstNode*/AstNode node) {
 		astNodes.push(node);
 	}
 	
-	private IAstNode popAstNode() {
+	private /*IAstNode*/AstNode popAstNode() {
 		return astNodes.pop();
 	}
 	
-	private void addAstNode(IAstNode node) {
+	private void addAstNode(/*IAstNode*/AstNode node) {
 		astNodes.peek().addChild(node);
 	}
 	
-	private IAstNode getAstNode() {
+	private /*IAstNode*/AstNode getAstNode() {
 		return astNodes.peek();
 	}
 	

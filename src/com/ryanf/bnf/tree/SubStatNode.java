@@ -1,6 +1,6 @@
 package com.ryanf.bnf.tree;
 
-import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstNode;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class SubStatNode extends AstNode {
@@ -8,21 +8,22 @@ public class SubStatNode extends AstNode {
 		super();
 	}
 	
-	public SubStatNode(IAstNode left, IAstNode right) {
+	public SubStatNode(/*IAstNode*/AstNode left, /*IAstNode*/AstNode right) {
 		super();
 		addChild(left);
 		addChild(right);
 	}
 	
+	/*
 	private SubStatNode(SubStatNode other) {
 		super(other);
-	}
+	}*/
 	
-	public IAstNode left() {
+	public /*IAstNode*/AstNode left() {
 		return getChild(0);
 	}
 	
-	public IAstNode right() {
+	public /*IAstNode*/AstNode right() {
 		return getChild(1);
 	}
 
@@ -36,6 +37,7 @@ public class SubStatNode extends AstNode {
 		return String.format("(%s - %s)", left().toString(), right().toString());
 	}
 
+	/*
 	@Override
 	public boolean contains(IAstNode node) {
 		return equals(node);
@@ -44,5 +46,5 @@ public class SubStatNode extends AstNode {
 	@Override
 	public IAstNode clone() {
 		return new SubStatNode(this);
-	}
+	}*/
 }

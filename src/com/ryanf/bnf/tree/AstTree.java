@@ -3,34 +3,36 @@ package com.ryanf.bnf.tree;
 import java.util.Vector;
 
 import com.ryanf.bnf.Lex;
-import com.ryanf.bnf.builders.ParseTreeBuilder;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.builders.ParseTreeBuilder;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.types.AstNodeType;
 
-public class AstTree implements IAstTree {
-	IAstNode statListNode;
+public class AstTree /*implements IAstTree*/ {
+	//IAstNode rootNode;
+	AstNode root;
 	
-	public AstTree(IAstNode statListNode) {
-		this.statListNode = statListNode;
+	public AstTree(/*IAstNode*/AstNode root) {
+		this.root = root;
 	}
 	
+	/*
 	public IAstNode getStatListNode() {
-		return statListNode;
+		return getRoot();
 	}
 	
 	protected int getStatNodeCount() {
-		return statListNode.getChildrenCount();
+		return rootNode.getChildrenCount();
 	}
 	
 	protected AsignStatNode getStatNode(int childIndex) {
 		if (childIndex < getStatNodeCount())
-			return (AsignStatNode)statListNode.getChild(childIndex);
+			return (AsignStatNode)rootNode.getChild(childIndex);
 		return null;
 	}
 	
 	private Iterable<IAstNode> getStatNodes() {
-		return statListNode.getChildren();
+		return rootNode.getChildren();
 	}
 
 	public Vector<IAstNode> getStatNodes(String identName) {
@@ -55,5 +57,9 @@ public class AstTree implements IAstTree {
 	
 	public boolean containsEmptyNode(String identName) {
 		return contains(identName, ParseTreeBuilder.createEmptyNode());
+	}*/
+
+	public AstNode getRoot() {
+		return root;
 	}
 }

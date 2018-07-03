@@ -3,10 +3,10 @@ package com.ryanf.bnf.tree;
 import java.util.Vector;
 
 import com.ryanf.bnf.Lex;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.types.AstNodeType;
-
+/*
 public class NormalisedAstTree extends AstTree implements INormalisedAstTree {
 	public NormalisedAstTree(IAstNode statListNode) {
 		super(statListNode);
@@ -93,4 +93,4 @@ public class NormalisedAstTree extends AstTree implements INormalisedAstTree {
 		return follows;
 	}
 
-}
+}*/

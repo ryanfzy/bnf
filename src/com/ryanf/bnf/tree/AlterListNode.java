@@ -1,6 +1,7 @@
 package com.ryanf.bnf.tree;
 
-import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.ITree;
 import com.ryanf.bnf.types.AstNodeType;
 
 public class AlterListNode extends AstNode {
@@ -8,9 +9,10 @@ public class AlterListNode extends AstNode {
 		super();
 	}
 	
+	/*
 	private AlterListNode(AlterListNode other) {
 		super(other);
-	}
+	}*/
 	
 	@Override
 	public AstNodeType getType() {
@@ -20,7 +22,8 @@ public class AlterListNode extends AstNode {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		for (IAstNode child : getChildren()) {
+		//for (IAstNode child : getChildren()) {
+		for (AstNode child : getChildren()) {
 			if (builder.length() == 0) {
 				builder.append("(");
 				builder.append(child.toString());
@@ -31,7 +34,16 @@ public class AlterListNode extends AstNode {
 		builder.append(")");
 		return builder.toString() + getQuantifierInStr();
 	}
+	
+	public int count() {
+		return getChildrenCount();
+	}
+	
+	public AstNode get(int index) {
+		return getChild(index);
+	}
 
+	/*
 	@Override
 	public boolean contains(IAstNode node) {
 		for (IAstNode child : getChildren()) {
@@ -48,5 +60,5 @@ public class AlterListNode extends AstNode {
 	@Override
 	public IAstNode clone() {
 		return new AlterListNode(this);
-	}
+	}*/
 }

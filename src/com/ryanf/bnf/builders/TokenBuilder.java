@@ -13,6 +13,7 @@ public class TokenBuilder {
 	Stack<TokenContext> contexts;
 	char quote;
 	boolean foundToken;
+	boolean escapeNextChar;
 	
 	public TokenBuilder() {
 		init();
@@ -23,10 +24,18 @@ public class TokenBuilder {
 			resetToken();
 		
 		if (isInStringContext()) {
-			addToToken(curChar);
-			if (curChar == quote) {
-				popTokenContext();
-				foundToken = true;
+			if (matchEscapeCharacter(curChar))
+				escapeNextChar = true;
+			else {
+				addToToken(curChar);
+				if (curChar == quote) {
+					if (escapeNextChar)
+						escapeNextChar = false;
+					else {
+						popTokenContext();
+						foundToken = true;
+					}
+				}
 			}
 		}
 		else if (isInCharacterSetContext()) {
@@ -46,22 +55,27 @@ public class TokenBuilder {
 				popTokenContext();
 			}
 		}
+		else if (matchEscapeCharacter(curChar)) {
+			escapeNextChar = true;
+		}
 		else if (matchOpenCharacterSet(curChar)) {
 			pushCharacterSetContext();
 			addToToken(curChar);
 			foundToken = true;
 		}
-		else if (Lex.matchNumberStartChar(curChar)) {
+		else if (!escapeNextChar && Lex.matchNumberStartChar(curChar)) {
 			addToToken(curChar);
 			pushNumberContext();
 		}
-		else if (Lex.matchSpecial(curChar)) {
-			addToToken(curChar);
-			foundToken = true;
-		}
-		else if (Lex.matchQuote(curChar)) {
+		else if (!escapeNextChar && Lex.matchQuote(curChar)) {
 			pushStringContext(curChar);
 			addToToken(curChar);
+		}
+		else if (Lex.matchSpecial(curChar)) {
+			if (escapeNextChar)
+				escapeNextChar = false;
+			addToToken(curChar);
+			foundToken = true;
 		}
 		else if (!Lex.matchIgnore(curChar)) {
 			addToToken(curChar);
@@ -81,6 +95,7 @@ public class TokenBuilder {
 		foundToken = false;
 		contexts = new Stack<TokenContext>();
 		contexts.push(TokenContext.NOCONTEXT);
+		escapeNextChar = false;
 		
 	}
 	
@@ -102,6 +117,10 @@ public class TokenBuilder {
 	
 	private boolean matchOpenCharacterSet(char ch) {
 		return ch == Lex.LeftSquareBrace;
+	}
+	
+	private boolean matchEscapeCharacter(char ch) {
+		return ch == Lex.Escape;
 	}
 	
 	private void popTokenContext() {
@@ -137,10 +156,16 @@ public class TokenBuilder {
 	}
 	
 	private String getTokenName() {
+		if (getTokenType() == TokenType.STRING) {
+			return strBuilder.substring(1, strBuilder.length() - 1);
+		}
+		else if (getTokenType() == TokenType.NUMBER) {
+			return strBuilder.substring(1);
+		}
 		return strBuilder.toString();
 	}
 	
 	private TokenType getTokenType() {
-		return Lex.getTokenType(getTokenName());
+		return Lex.getTokenType(strBuilder.toString());
 	}
 }

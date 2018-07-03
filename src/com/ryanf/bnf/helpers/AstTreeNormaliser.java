@@ -3,13 +3,14 @@ package com.ryanf.bnf.helpers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ryanf.bnf.builders.ParseTreeBuilder;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.builders.ParseTreeBuilder;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
 import com.ryanf.bnf.types.AstNodeType;
 import com.ryanf.bnf.types.QuantifierType;
 
 public class AstTreeNormaliser {
+	/*
 	Map<String, IAstNode> normalisedNodes;
 	IAstTree tree;
 	IAstNode statListNode;
@@ -17,7 +18,7 @@ public class AstTreeNormaliser {
 	
 	private AstTreeNormaliser(IAstTree tree) {
 		this.tree = tree;
-		statListNode = tree.getStatListNode();
+		statListNode = tree.getRoot();
 		init();
 	}
 	
@@ -154,5 +155,5 @@ public class AstTreeNormaliser {
 	public static void normalise(IAstTree tree) {
 		AstTreeNormaliser normaliser = new AstTreeNormaliser(tree);
 		normaliser.normalise();
-	}
+	}*/
 }

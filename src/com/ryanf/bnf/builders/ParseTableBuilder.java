@@ -1,19 +1,22 @@
 package com.ryanf.bnf.builders;
 
 import com.ryanf.bnf.ParseTable;
-import com.ryanf.bnf.interfaces.IAstNode;
-import com.ryanf.bnf.interfaces.IAstTree;
-import com.ryanf.bnf.interfaces.INormalisedAstTree;
+//import com.ryanf.bnf.interfaces.IAstNode;
+//import com.ryanf.bnf.interfaces.IAstTree;
+//import com.ryanf.bnf.interfaces.INormalisedAstTree;
 import com.ryanf.bnf.interfaces.IParseTable;
-import com.ryanf.bnf.types.AstNodeType;
+import com.ryanf.bnf.tree.AstTree;
+//import com.ryanf.bnf.types.AstNodeType;
 
 public class ParseTableBuilder {
-	public static IParseTable createParseTable(IAstTree tree) throws Exception {
-		if (tree.getStatListNode().getType() == AstNodeType.STATLIST) {
+	public static IParseTable createParseTable(AstTree tree) throws Exception {
+		return new ParseTable();
+		/*
+		if (tree.getRoot().getType() == AstNodeType.STATLIST) {
 			
 			INormalisedAstTree normalisedTree = ParseTreeBuilder.createNormalisedAstTree(tree);
 			IParseTable table = new ParseTable();	
-			IAstNode statListNode = tree.getStatListNode();
+			IAstNode statListNode = tree.getRoot();
 
 			// add rows
 			for (IAstNode statNode : statListNode.getChildren()){
@@ -35,6 +38,6 @@ public class ParseTableBuilder {
 			
 			return table;
 		}
-		return null;
+		return null;*/
 	}
 }
