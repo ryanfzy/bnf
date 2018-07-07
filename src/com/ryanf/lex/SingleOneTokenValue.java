@@ -39,11 +39,19 @@ public class SingleOneTokenValue extends SingleTokenValue {
 		if (lastValue != LexTable.ERROR_NUMBER) {
 			Vector<Integer> row = table.get(lastValue);
 			for (int i = 0; i < row.size(); i++) {
-				if (row.get(i) > LexTable.ERROR_NUMBER)
-					table.lastElement().set(i, lastValue);
+				if (row.get(i) > LexTable.ERROR_NUMBER) {
+					int colValue = getReplacedValue(table, lastValue, i);
+					table.lastElement().set(i, colValue);
+				}
 			}
 		}
-		//return LexTable.ERROR_NUMBER;
+	}
+	
+	private int getReplacedValue(LexTable table, int rowIndex, int colIndex) {
+		int value = table.get(rowIndex).get(colIndex);
+		if (value > LexTable.ERROR_NUMBER && table.FillValues().get(rowIndex) < LexTable.ERROR_NUMBER)
+			return getReplacedValue(table, value, colIndex);
+		return colIndex;
 	}
 
 	@Override

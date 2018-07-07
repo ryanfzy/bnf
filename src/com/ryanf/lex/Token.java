@@ -7,15 +7,11 @@ import com.ryanf.lex.types.ValueType;
 
 public class Token {
 	private String name;
-	//private Vector<Long> values;
-	//private ValueType valueType;
 	private Vector<TokenValue> values;
 	
 	public Token(String name, String value) {
 		this.name = name;
-		//values = new Vector<Long>();
 		values = new Vector<TokenValue>();
-		//valueType = ValueType.Single;
 		
 		parseValue(value);
 	}
@@ -28,51 +24,40 @@ public class Token {
 		return values;
 	}
 	
-	/*
-	public Vector<Long> Values() {
+	private void parseValue(String value) {
+		TokenItemParser parser = new TokenItemParser(value);
+		TokenItem item = parser.Next();
+		while (item != null) {
+			if (item.Type() == ValueType.AnyOneOrMore)
+				values.add(new MultiOneOrMoreTokenValue(getValues(item.Value())));
+			else
+				values.add(new SingleOneTokenValue(getValue(item.Value())));
+			item = parser.Next();
+		}
+	}
+	
+	private Vector<Long> getValues(String value) {
+		Vector<Long> values = new Vector<Long>();
+		TokenItemParser parser = new TokenItemParser(value);
+		TokenItem item = parser.Next();
+		while (item != null) {
+			String[] parts = item.Value().split("-");
+			if (parts.length == 2) {
+				long endValue = getValue(parts[1]) + 1;
+				for (long startValue = getValue(parts[0]); startValue < endValue; startValue++)
+					values.add(startValue);
+			}
+			else
+				values.add(getValue(item.Value()));
+			item = parser.Next();
+		}
 		return values;
 	}
 	
-	public ValueType ValueType() {
-		return valueType;
-	}*/
-	
-	// TODO: change this function
-	private void parseValue(String value) {
-		ValueType valueType = ValueType.Single;
-		if (isAnyOneOrMoreValue(value)) {
-			valueType = ValueType.AnyOneOrMore;
-			value = value.substring(1, value.length()-2);
-		}
-		Vector<Long> tokenValues = parseValues(value);
-		if (valueType == ValueType.AnyOneOrMore)
-			values.add(new MultiOneOrMoreTokenValue(tokenValues));
-			//values.add(new TokenValue(tokenValues, valueType));
-		else {
-			for (long tokenValue : tokenValues)
-				values.add(new SingleOneTokenValue(tokenValue));
-				//values.add(new TokenValue(tokenValue, valueType));
-		}
-	}
-	
-	private Vector<Long> parseValues(String value){
-		Vector<Long> tokenValues = new Vector<Long>();
-		String[] parts = value.split("\\s+");
-		for (String part : parts) {
-			if (part.startsWith("#x")) {
-				tokenValues.add(Long.parseLong(part.replace("#x", ""), 16));
-			}
-			else {
-				for (char ch : value.toCharArray())
-					tokenValues.add((long)ch);
-			}
-		}
-		return tokenValues;
-	}
-	
-	private boolean isAnyOneOrMoreValue(String value) {
-		String pat = "\\[.*\\]\\+";
-		return Pattern.matches(pat, value);
+	private Long getValue(String value) {
+		if (value.startsWith("#x"))
+			return Long.parseLong(value.replace("#x", ""), 16);
+		return (long)value.toCharArray()[0];
 	}
 	
 	public void addToTable(LexTable table) {

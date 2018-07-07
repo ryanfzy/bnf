@@ -27,7 +27,8 @@ public class MultiOneOrMoreTokenValue extends MultiTokenValue {
 
 	@Override
 	public void addToTableLast(LexTable table, int lastIndex) {
-		table.addRow(table.nextReverseOneTokenNumber());
+		//table.addRow(table.nextReverseOneTokenNumber());
+		table.fillRow(table.lastElement(), table.nextReverseOneTokenNumber());
 		for (long value : values) {
 			if (!table.ofColHeaders(value))
 				table.addColHeader(value);

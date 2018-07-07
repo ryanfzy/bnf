@@ -23,6 +23,8 @@ public class TestLex {
 			"TAG_START = <",
 			"TAG_END = >",
 			"END_TAG_START = </",
+			"EMPTY_TAG_END = />",
+			"VERSION_NUM = 1.[0-9]+",
 			//"ENCODING = encoding",
 			//"DOUBLE_QUOTE = \"",
 			//"STANDALONE = standalone",
