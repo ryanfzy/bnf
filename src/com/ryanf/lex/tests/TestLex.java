@@ -20,13 +20,16 @@ public class TestLex {
 			"XML_DECL_END = ?>",
 			"VERSION = version",
 			"SPACE = [#x20 #x9 #xD #xA]+",
-			"TAG_START = <",
-			"TAG_END = >",
-			"END_TAG_START = </",
-			"EMPTY_TAG_END = />",
+			"EQUAL = =",
 			"VERSION_NUM = 1.[0-9]+",
-			//"ENCODING = encoding",
-			//"DOUBLE_QUOTE = \"",
+			"ENCODING = encoding",
+			"DOUBLE_QUOTE = \"",
+			"ENC_NAME = [A-Za-z] ([A-Za-z0-9._] | -)*",
+			
+			//"TAG_START = <",
+			//"TAG_END = >",
+			//"END_TAG_START = </",
+			//"EMPTY_TAG_END = />",
 			//"STANDALONE = standalone",
 			//"YES = yes",
 			//"NO = no",
@@ -51,6 +54,8 @@ public class TestLex {
 				System.out.print(String.format("%4d,", num));
 			System.out.println("]");
 		}
+		System.out.println("");
+		System.out.println(table.GetCFileOutput());
 	}
 
 }

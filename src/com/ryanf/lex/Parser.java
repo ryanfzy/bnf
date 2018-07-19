@@ -5,8 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parser {
+	private static String TOKEN_LINE_PATTERN = "^(.+?)=(.+?)$";
 	public static Lex parseFile(String fileName) {
 		Vector<Token> tokens = new Vector<Token>();
 		try {
@@ -23,10 +26,10 @@ public class Parser {
 	}
 	
 	public static Token parseString(String str) {
-		String[] parts = str.split("=");
-		if (parts.length == 2) {
-			return new Token(parts[0].trim(), parts[1].trim());
-		}
+		Pattern p = Pattern.compile(TOKEN_LINE_PATTERN);
+		Matcher m = p.matcher(str);
+		if (m.find() && m.groupCount() >= 2)
+			return new Token(m.group(1).trim(), m.group(2).trim());
 		return null;
 	}
 }

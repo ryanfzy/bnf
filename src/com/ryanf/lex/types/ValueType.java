@@ -1,6 +1,11 @@
 package com.ryanf.lex.types;
 
 public enum ValueType {
-	Single,
-	AnyOneOrMore,
+	SingleCharacter,
+	AnySetOneOrMore,
+	AnySetZeroOrMore,
+	AnySet,
+	MultiAnySet,
+	MultiAnySetZeroOrMore,
+	CharacterRange,
 }

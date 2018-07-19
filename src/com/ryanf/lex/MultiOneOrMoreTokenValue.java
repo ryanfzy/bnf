@@ -16,6 +16,7 @@ public class MultiOneOrMoreTokenValue extends MultiTokenValue {
 			int colIndex = table.indexOfColHeaders(value);
 			table.firstRow().set(colIndex, table.sizeOfRows());
 		}
+		table.addRow();
 		return LexTable.ERROR_NUMBER;
 	}
 
@@ -27,15 +28,14 @@ public class MultiOneOrMoreTokenValue extends MultiTokenValue {
 
 	@Override
 	public void addToTableLast(LexTable table, int lastIndex) {
-		//table.addRow(table.nextReverseOneTokenNumber());
-		table.fillRow(table.lastElement(), table.nextReverseOneTokenNumber());
+		table.fillRow(table.size()-1, table.nextTokenNumber());
+		table.addTokenInfo(table.nextTokenNumber(), new TokenInfo(table.TokenNames().lastElement(), false));
 		for (long value : values) {
 			if (!table.ofColHeaders(value))
 				table.addColHeader(value);
 			int colIndex = table.indexOfColHeaders(value);
 			table.lastElement().set(colIndex, table.sizeOfRows()-1);
 		}
-		//return LexTable.ERROR_NUMBER;
 	}
 
 	@Override

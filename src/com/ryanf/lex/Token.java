@@ -28,10 +28,14 @@ public class Token {
 		TokenItemParser parser = new TokenItemParser(value);
 		TokenItem item = parser.Next();
 		while (item != null) {
-			if (item.Type() == ValueType.AnyOneOrMore)
+			if (item.Type() == ValueType.AnySetOneOrMore)
 				values.add(new MultiOneOrMoreTokenValue(getValues(item.Value())));
+			else if (item.Type() == ValueType.AnySet)
+				values.add(new MultiTokenValue(getValues(item.Value())));
+			else if (item.Type() == ValueType.MultiAnySetZeroOrMore)
+				values.add(new MultiZeroOrMoreTokenValue(getValues(item.Value())));
 			else
-				values.add(new SingleOneTokenValue(getValue(item.Value())));
+				values.add(new SingleTokenValue(getValue(item.Value())));
 			item = parser.Next();
 		}
 	}
@@ -41,11 +45,15 @@ public class Token {
 		TokenItemParser parser = new TokenItemParser(value);
 		TokenItem item = parser.Next();
 		while (item != null) {
-			String[] parts = item.Value().split("-");
-			if (parts.length == 2) {
-				long endValue = getValue(parts[1]) + 1;
-				for (long startValue = getValue(parts[0]); startValue < endValue; startValue++)
-					values.add(startValue);
+			if (item.Type() == ValueType.AnySet)
+				values.addAll(getValues(item.Value()));
+			else if (item.Type() == ValueType.CharacterRange) {
+				String[] parts = item.Value().split("-");
+				if (parts.length == 2) {
+					long endValue = getValue(parts[1]) + 1;
+					for (long startValue = getValue(parts[0]); startValue < endValue; startValue++)
+						values.add(startValue);
+				}
 			}
 			else
 				values.add(getValue(item.Value()));

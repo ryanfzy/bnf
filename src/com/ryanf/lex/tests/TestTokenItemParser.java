@@ -16,7 +16,7 @@ public class TestTokenItemParser {
 		TokenItemParser parser = new TokenItemParser(input);
 		TokenItem item = parser.Next();
 		assertEquals("#x20 #x9 #xD #xA", item.Value());
-		assertEquals(ValueType.AnyOneOrMore, item.Type());
+		assertEquals(ValueType.AnySetOneOrMore, item.Type());
 		item = parser.Next();
 		assertEquals(null, item);
 	}
@@ -43,13 +43,13 @@ public class TestTokenItemParser {
 		TokenItemParser parser = new TokenItemParser(input);
 		TokenItem item = parser.Next();
 		assertEquals("1", item.Value());
-		assertEquals(ValueType.Single, item.Type());
+		assertEquals(ValueType.SingleCharacter, item.Type());
 		item = parser.Next();
 		assertEquals(".", item.Value());
-		assertEquals(ValueType.Single, item.Type());
+		assertEquals(ValueType.SingleCharacter, item.Type());
 		item = parser.Next();
 		assertEquals("0-9", item.Value());
-		assertEquals(ValueType.AnyOneOrMore, item.Type());
+		assertEquals(ValueType.AnySetOneOrMore, item.Type());
 		item = parser.Next();
 		assertEquals(null, item);
 	}
@@ -60,9 +60,31 @@ public class TestTokenItemParser {
 		TokenItemParser parser = new TokenItemParser(input);
 		TokenItem item = parser.Next();
 		assertEquals("a-z", item.Value());
+		assertEquals(item.Type(), ValueType.CharacterRange);
 		item = parser.Next();
 		assertEquals("A-Z", item.Value());
+		assertEquals(item.Type(), ValueType.CharacterRange);
 		item = parser.Next();
 		assertEquals("0-9", item.Value());
+		assertEquals(item.Type(), ValueType.CharacterRange);
+	}
+	
+	@Test
+	public void testAnyList() {
+		String input = "[A-Za-z] ([A-Za-z0-9._] | -)*";
+		TokenItemParser parser = new TokenItemParser(input);
+		TokenItem item = parser.Next();
+		assertEquals("A-Za-z", item.Value());
+		assertEquals(ValueType.AnySet, item.Type());
+		item = parser.Next();
+		assertEquals("[A-Za-z0-9._] | -", item.Value());
+		assertEquals(ValueType.MultiAnySetZeroOrMore, item.Type());
+		parser = new TokenItemParser(item.Value());
+		item = parser.Next();
+		assertEquals("A-Za-z0-9._", item.Value());
+		assertEquals(ValueType.AnySet, item.Type());
+		item = parser.Next();
+		assertEquals("-", item.Value());
+		assertEquals(ValueType.SingleCharacter, item.Type());
 	}
 }
