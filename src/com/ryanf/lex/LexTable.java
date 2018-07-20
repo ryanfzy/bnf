@@ -141,6 +141,24 @@ public class LexTable extends Vector<Vector<Integer>> {
 		// output token info
 		builder.append("typedef struct _tokenInfo\n{\n    int id;\n    bool moveNext;\n} TokenInfo;\n");
 		builder.append("typedef struct _tokenInfoList\n{\n    int count;\n    TokenInfo *plist;\n} TokenInfoList;\n");
+		for (int i = 0; i < tokenInfoList.size(); i++) {
+			Vector<TokenInfo> tokens = tokenInfoList.get(i);
+			builder.append(String.format("TokenInfo tokenInfo%d[%d] = { ", i, tokens.size()));
+			for (int j = 0; j < tokens.size(); j++) {
+				if (j > 0)
+					builder.append(", ");
+				builder.append(String.format("{ %s, %s }", tokens.get(j).Name(), tokens.get(j).MoveNext() ? "true" : "false"));
+			}
+			builder.append(" };\n");
+		}
+		builder.append(String.format("TokenInfoList TOKEN_INFO_LIST[%d] =\n{\n", tokenInfoList.size()));
+		for (int i = 0; i < tokenInfoList.size(); i++) {
+			builder.append(String.format("    { %d, (TokenInfo*)&tokenInfo%d }", tokenInfoList.get(i).size(), i));
+			if (i < tokenInfoList.size()-1)
+				builder.append(",");
+			builder.append("\n");
+		}
+		builder.append("};\n");
 		
 		// output lex table
 		builder.append(String.format("int lex_table[%d][%d] =\n{\n", size(), colHeaders.size()));
